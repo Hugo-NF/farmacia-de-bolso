@@ -1,0 +1,12 @@
+{
+  "name": "farmacia-de-bolso",
+  "displayName": "farmacia-de-bolso",
+  "expo": {
+    "name": "farmacia-de-bolso",
+    "slug": "farmacia-de-bolso",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
