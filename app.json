@@ -1,8 +1,8 @@
 {
   "name": "farmacia-de-bolso",
-  "displayName": "farmacia-de-bolso",
+  "displayName": "Farmácia de Bolso",
   "expo": {
-    "name": "farmacia-de-bolso",
+    "name": "Farmácia de Bolso",
     "slug": "farmacia-de-bolso",
     "version": "1.0.0",
     "assetBundlePatterns": [
