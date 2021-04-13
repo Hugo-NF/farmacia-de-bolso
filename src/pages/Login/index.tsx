@@ -8,7 +8,7 @@ import { MainContainer } from './styles';
 const MainMenu = (): JSX.Element => (
   <MainContainer>
     <Text>Login!</Text>
-    <Chip icon="heart" onPress={() => console.log('Pressed')}>Amo todos vocês</Chip>
+    <Chip icon="heart">Amo todos vocês</Chip>
     <StatusBar style="auto" />
   </MainContainer>
 );
