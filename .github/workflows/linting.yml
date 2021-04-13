@@ -3,7 +3,7 @@ name: Linting
 on: pull_request
 
 jobs:
-  ci:
+  linting:
     runs-on: ubuntu-latest
 
     steps:
