@@ -1,16 +1,8 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
-import { Text, ViewProps } from 'react-native';
-import { Chip } from 'react-native-paper';
-import styled from 'styled-components/native';
+import { NavigationContainer } from '@react-navigation/native';
 
-const MainContainer = styled.View < ViewProps > `
-  flex: 1;
-  background-color: #fff;
-  align-items: center;
-  justify-content: center;
-`;
+import Routes from './routes';
 
 // Customizar tema posteriormente
 const theme = {
@@ -35,11 +27,9 @@ const theme = {
 export default function App(): JSX.Element {
   return (
     <PaperProvider theme={theme}>
-      <MainContainer>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Chip icon="heart" onPress={() => console.log('Pressed')}>Example Chip</Chip>
-        <StatusBar style="auto" />
-      </MainContainer>
+      <NavigationContainer>
+        <Routes />
+      </NavigationContainer>
     </PaperProvider>
   );
 }
