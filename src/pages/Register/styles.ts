@@ -15,7 +15,6 @@ export const styledComponents = {
 
   MainContainer: styled.View<ViewProps>`
     flex: 1;
-    background-color: ${Theme.colors.background};
     align-items: center;
     justify-content: center;
   `,
@@ -32,6 +31,7 @@ export const styledComponents = {
     justify-content: center;
     align-items: center;
     width: 250px;
+    min-height: 50px;
     max-height: 50px;
     background-color: ${Theme.colors.primary};
     border-radius: 5px;

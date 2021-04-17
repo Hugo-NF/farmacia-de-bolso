@@ -1,5 +1,6 @@
 import React from 'react';
 import AppLoading from 'expo-app-loading';
+import { StatusBar } from 'expo-status-bar';
 
 // React native paper provider
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -29,6 +30,7 @@ export default function App(): JSX.Element {
   return (
     <PaperProvider theme={Theme}>
       <NavigationContainer>
+        <StatusBar style="auto" />
         <Routes />
       </NavigationContainer>
     </PaperProvider>
