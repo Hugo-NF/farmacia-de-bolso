@@ -15,7 +15,7 @@ import {
 } from '@expo-google-fonts/roboto';
 
 import Routes from './routes';
-import { theme } from './constants';
+import { Theme } from './constants';
 
 export default function App(): JSX.Element {
   const [fontsLoaded] = useFonts({
@@ -27,7 +27,7 @@ export default function App(): JSX.Element {
     return <AppLoading />;
   }
   return (
-    <PaperProvider theme={theme}>
+    <PaperProvider theme={Theme}>
       <NavigationContainer>
         <Routes />
       </NavigationContainer>

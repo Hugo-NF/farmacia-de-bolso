@@ -5,7 +5,7 @@ import { Chip } from 'react-native-paper';
 
 import { MainContainer } from './styles';
 
-const MainMenu = (): JSX.Element => (
+const Login = (): JSX.Element => (
   <MainContainer>
     <Text>Login!</Text>
     <Chip icon="heart">Amo todos vocês</Chip>
@@ -13,4 +13,4 @@ const MainMenu = (): JSX.Element => (
   </MainContainer>
 );
 
-export default MainMenu;
+export default Login;
