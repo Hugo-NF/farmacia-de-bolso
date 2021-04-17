@@ -1,7 +1,7 @@
-import theme from './theme';
-import constants from './constants';
+import Theme from './theme';
+import Constants from './constants';
 
 export {
-  constants,
-  theme,
+  Constants,
+  Theme,
 };
