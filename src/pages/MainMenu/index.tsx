@@ -6,6 +6,9 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 // Component imports.
 import { ContentCard } from '../../components/ContentCard';
 
+// Layout imports.
+import MainLayout from '../../layouts/MainLayout';
+
 // Style imports.
 import { styledComponents, styles } from './styles';
 
@@ -66,17 +69,19 @@ const MainMenu = (): JSX.Element => {
 
   // JSX returned.
   return (
-    <MainContainer>
-      <FlatList
-        data={menuItems}
-        renderItem={({ item }) => renderMenuItem(item)}
-        keyExtractor={(item) => item.name}
-        contentContainerStyle={styles.flatlistMenu}
-        ListHeaderComponent={
-          <HeaderPlaceholder>Header placeholder</HeaderPlaceholder>
-        }
-      />
-    </MainContainer>
+    <MainLayout disableScrollView>
+      <MainContainer>
+        <FlatList
+          data={menuItems}
+          renderItem={({ item }) => renderMenuItem(item)}
+          keyExtractor={(item) => item.name}
+          contentContainerStyle={styles.flatlistMenu}
+          ListHeaderComponent={
+            <HeaderPlaceholder>Header placeholder</HeaderPlaceholder>
+          }
+        />
+      </MainContainer>
+    </MainLayout>
   );
 };
 

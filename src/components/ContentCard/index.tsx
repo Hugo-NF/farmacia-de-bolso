@@ -6,8 +6,8 @@ import { styledComponents } from './styles';
 
 // Interface declaration.
 interface IContentCard {
-  cardStyles: Record<string, unknown>,
-  children: Array<JSX.Element>,
+  cardStyles?: Record<string, unknown>,
+  children?: Array<JSX.Element>,
 }
 
 // Component.

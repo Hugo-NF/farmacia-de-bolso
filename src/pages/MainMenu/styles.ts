@@ -1,5 +1,4 @@
 // Package imports.
-import Constants from 'expo-constants';
 import { TextProps, ViewProps } from 'react-native';
 import styled from 'styled-components/native';
 
@@ -24,7 +23,6 @@ export const styledComponents = {
     align-items: center;
     background-color: ${Theme.colors.background};
     justify-content: flex-start;
-    margin-top: ${Constants.statusBarHeight}px;
   `,
 
   MenuItemTitle: styled.Text<TextProps>`
