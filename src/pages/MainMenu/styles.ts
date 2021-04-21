@@ -7,17 +7,6 @@ import { Theme } from '../../constants';
 
 // Styled components.
 export const styledComponents = {
-  HeaderPlaceholder: styled.Text<TextProps>`
-    align-self: center;
-    color: ${Theme.colors.text};
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 30px;
-    margin-bottom: 27px;
-    margin-top: 16px;
-  `,
-
   MainContainer: styled.View<ViewProps>`
     flex: 1;
     align-items: center;

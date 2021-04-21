@@ -51,7 +51,7 @@ const MainMenu = (): JSX.Element => {
   ];
 
   // Styled components.
-  const { HeaderPlaceholder, MainContainer, MenuItemTitle } = styledComponents;
+  const { MainContainer, MenuItemTitle } = styledComponents;
 
   // Functions.
   function renderMenuItem(menuItem : MenuItem) : JSX.Element {
@@ -76,9 +76,6 @@ const MainMenu = (): JSX.Element => {
           renderItem={({ item }) => renderMenuItem(item)}
           keyExtractor={(item) => item.name}
           contentContainerStyle={styles.flatlistMenu}
-          ListHeaderComponent={
-            <HeaderPlaceholder>Header placeholder</HeaderPlaceholder>
-          }
         />
       </MainContainer>
     </MainLayout>

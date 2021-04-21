@@ -6,8 +6,8 @@ import styled from 'styled-components/native';
 export const styledComponents = {
 
   CardContainer: styled.View<ViewProps>`
-    backgroundColor: #fff;
-    borderRadius: 6px;
+    background-color: white;
+    border-radius: 6px;
     height: 124px;
     margin: 12px 18px;
     padding: 12px;
@@ -15,9 +15,9 @@ export const styledComponents = {
 
     /* Shadow properties for Android and IOS. */
     elevation: 6;
-    shadowColor: rgba(0, 0, 0, 0.25);
-    shadowOffset: 2px 2px;
-    shadowRadius: 6px;
+    shadow-color: rgba(0, 0, 0, 0.25);
+    shadow-offset: 2px 2px;
+    shadow-radius: 6px;
   `,
 
 };
