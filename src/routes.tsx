@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 
 const Routes = (): JSX.Element => (
   <Stack.Navigator
-    initialRouteName="MainMenu"
+    initialRouteName="Login"
     screenOptions={{ headerShown: false }}
   >
     <Stack.Screen name="MainMenu" component={MainMenu} options={{ title: 'Menu principal' }} />
