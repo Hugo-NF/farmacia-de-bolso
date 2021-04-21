@@ -5,7 +5,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { styledComponents } from './styles';
 
 interface IMainLayoutProps {
-  disableScrollView?: boolean,
+  disableScrollView: false,
   children: JSX.Element,
 }
 

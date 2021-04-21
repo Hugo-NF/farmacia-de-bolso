@@ -12,14 +12,13 @@ import { Constants } from '../../constants';
 import { styledComponents, styles } from './styles';
 
 const Login = (): JSX.Element => {
-
   // Styles desestructuring
   const {
     MainContainer,
     Title,
     SignUpButton,
-    ButtonText
-  } =  styledComponents
+    ButtonText,
+  } = styledComponents;
 
   const loginCallback = (formData: FormikValues): void => {
     console.log(formData);
@@ -33,7 +32,7 @@ const Login = (): JSX.Element => {
         <Formik
           initialValues={{
             email: '',
-            password: ''
+            password: '',
           }}
           validationSchema={Yup.object().shape({
             email: Yup.string().required('E-mail é obrigatório').email('Deve ser um e-mail válido'),

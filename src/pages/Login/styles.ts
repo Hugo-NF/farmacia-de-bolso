@@ -37,7 +37,7 @@ export const styledComponents = {
     margin-top: 32px;
     margin-bottom: 24px;
   `,
-}
+};
 
 // Styles.
 export const styles = {
