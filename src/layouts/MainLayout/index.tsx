@@ -36,3 +36,8 @@ export default function MainLayout({
     </LayoutContainer>
   );
 }
+
+// Default props.
+MainLayout.defaultProps = {
+  disableScrollView: false,
+};
