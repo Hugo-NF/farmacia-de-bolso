@@ -1,16 +1,86 @@
+// Package imports.
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { Text } from 'react-native';
-import { Chip } from 'react-native-paper';
+import { FlatList } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { MainContainer } from './styles';
+// Component imports.
+import { ContentCard } from '../../components/ContentCard';
 
-const MainMenu = (): JSX.Element => (
-  <MainContainer>
-    <Text>Menu</Text>
-    <Chip icon="heart-broken" onPress={() => console.log('Pressed')}>Mó kao a outra tela</Chip>
-    <StatusBar style="auto" />
-  </MainContainer>
-);
+// Layout imports.
+import MainLayout from '../../layouts/MainLayout';
 
+// Style imports.
+import { styledComponents, styles } from './styles';
+
+// Type declarations.
+type MenuItem = {
+  name: string,
+  icon: string,
+  color: string
+};
+
+// Component declaration.
+const MainMenu = (): JSX.Element => {
+  // Variables.
+  const menuItems : Array<MenuItem> = [
+    {
+      name: 'Medicamentos',
+      icon: 'pill',
+      color: styles.menuItemIconColors.pill,
+    },
+    {
+      name: 'Alarmes',
+      icon: 'bell-ring-outline',
+      color: styles.menuItemIconColors.bell,
+    },
+    {
+      name: 'Estoque',
+      icon: 'package-variant-closed',
+      color: styles.menuItemIconColors.package,
+    },
+    {
+      name: 'Histórico',
+      icon: 'history',
+      color: styles.menuItemIconColors.history,
+    },
+    {
+      name: 'Relatório',
+      icon: 'file-document-outline',
+      color: styles.menuItemIconColors.file,
+    },
+  ];
+
+  // Styled components.
+  const { MainContainer, MenuItemTitle } = styledComponents;
+
+  // Functions.
+  function renderMenuItem(menuItem : MenuItem) : JSX.Element {
+    return (
+      <ContentCard cardStyles={styles.menuItem}>
+        <MenuItemTitle>{menuItem.name}</MenuItemTitle>
+        <MaterialCommunityIcons
+          name={menuItem.icon}
+          size={styles.menuItemIcon.size}
+          color={menuItem.color}
+        />
+      </ContentCard>
+    );
+  }
+
+  // JSX returned.
+  return (
+    <MainLayout disableScrollView>
+      <MainContainer>
+        <FlatList
+          data={menuItems}
+          renderItem={({ item }) => renderMenuItem(item)}
+          keyExtractor={(item) => item.name}
+          contentContainerStyle={styles.flatlistMenu}
+        />
+      </MainContainer>
+    </MainLayout>
+  );
+};
+
+// Export default.
 export default MainMenu;
