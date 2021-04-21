@@ -78,7 +78,7 @@ const Register = (): JSX.Element => {
               .required('Confirmação de senha é obrigatória')
               .equals([Yup.ref('password')], 'Deve ser igual à senha'),
           })}
-          onSubmit={(data) => signUp(data)}
+          onSubmit={signUp}
         >
           {(formikHelpers) => (
             <>

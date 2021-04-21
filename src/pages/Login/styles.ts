@@ -14,6 +14,7 @@ export const styledComponents = {
   Title: styled.Text<TextProps>`
     font-size: 26px;
     text-align: center;
+    width: 80%;
     color: ${Theme.colors.primary};
     margin-bottom: 80px;
   `,
