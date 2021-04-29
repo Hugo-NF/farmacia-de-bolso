@@ -5,7 +5,7 @@ import HeaderTitle, { IHeaderTitleProps } from '../HeaderTitle';
 import { styledComponents } from './styles';
 import HeaderHelpButton from '../HeaderHelpButton';
 
-enum HeaderMode {
+export enum HeaderMode {
   Image,
   Title,
   Custom
