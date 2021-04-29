@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import MainLayout from '../../layouts/MainLayout';
 import CustomTextInput from '../../components/CustomTextInput';
 import MedicineSection from '../../components/MedicineSection';
+import { ContentCard } from '../../components/ContentCard';
 import { HeaderMode } from '../../components/Header';
 import { styledComponents, styles } from './styles';
 
@@ -14,6 +15,12 @@ const Login = (): JSX.Element => {
   const {
     MainContainer,
     DescText,
+    ButtonTextWhite,
+    ButtonTextBlack,
+    GrayButton,
+    GreenButton,
+    RedButton,
+    OrangeButton,
   } = styledComponents;
 
   const mockMedicineData = {
@@ -43,16 +50,16 @@ const Login = (): JSX.Element => {
 
   const mockHistoric = [
     {
-      datetime: 'Seg (26/03) - 19:30', quantity: 2, medicated: true,
+      id: 1, datetime: 'Seg (26/03) - 19:30', quantity: 2, medicated: true,
     },
     {
-      datetime: 'Seg (26/03) - 14:30', quantity: 2, medicated: true,
+      id: 2, datetime: 'Seg (26/03) - 14:30', quantity: 2, medicated: true,
     },
     {
-      datetime: 'Dom (25/03) - 19:30', quantity: 2, medicated: false,
+      id: 3, datetime: 'Dom (25/03) - 19:30', quantity: 2, medicated: false,
     },
     {
-      datetime: 'Dom (25/03) - 14:30', quantity: 2, medicated: true,
+      id: 4, datetime: 'Dom (25/03) - 14:30', quantity: 2, medicated: true,
     },
   ];
 
@@ -72,7 +79,9 @@ const Login = (): JSX.Element => {
     return (
       <>
         {mockSchedules.map((s) => (
-          <DescText key={s.id}>{`${s.days}, ${s.time}, ${s.quantity}`}</DescText>
+          <ContentCard key={s.id} cardStyles={styles.ContentCard}>
+            <DescText>{`${s.days}, ${s.time}, ${s.quantity}`}</DescText>
+          </ContentCard>
         ))}
       </>
     );
@@ -90,7 +99,9 @@ const Login = (): JSX.Element => {
     return (
       <>
         {mockAlarms.map((a) => (
-          <DescText key={a.id}>{`${a.days}, ${a.time}, ${a.quantity}`}</DescText>
+          <ContentCard key={a.id} cardStyles={styles.ContentCard}>
+            <DescText>{`${a.days}, ${a.time}, ${a.quantity}`}</DescText>
+          </ContentCard>
         ))}
       </>
     );
@@ -99,7 +110,7 @@ const Login = (): JSX.Element => {
   const renderHistoric = () : JSX.Element => (
     <>
       {mockHistoric.map((h) => (
-        <DescText>{`${h.datetime} - ${h.quantity} - ${h.medicated}`}</DescText>
+        <DescText key={h.id}>{`${h.datetime} - ${h.quantity} - ${h.medicated}`}</DescText>
       ))}
     </>
   );
@@ -149,10 +160,16 @@ const Login = (): JSX.Element => {
               />
 
               <MedicineSection title="Horários">
+                <GreenButton>
+                  <ButtonTextWhite>Cadastrar novo horário --</ButtonTextWhite>
+                </GreenButton>
                 {renderSchedulers()}
               </MedicineSection>
 
               <MedicineSection title="Alarmes">
+                <GreenButton>
+                  <ButtonTextWhite>Cadastrar novo alarme --</ButtonTextWhite>
+                </GreenButton>
                 {renderAlarms()}
               </MedicineSection>
 
@@ -176,6 +193,9 @@ const Login = (): JSX.Element => {
                   Aqui é um breve resumo, onde você poderá ver seu histórico parcial (última semana).
                   Poderá ver quando tomou esse medicamento, e quantos.
                 </DescText>
+                <GrayButton>
+                  <ButtonTextBlack>Ver todo o histórico -</ButtonTextBlack>
+                </GrayButton>
                 {renderHistoric()}
               </MedicineSection>
             </>

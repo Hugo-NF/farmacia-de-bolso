@@ -7,6 +7,7 @@ export const styledComponents = {
   Container: styled.View<ViewProps>`
     width: 100%;
     margin-top: 80px;
+    align-items: baseline;
   `,
 
   Header: styled.View<ViewProps>`
