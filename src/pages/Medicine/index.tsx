@@ -10,6 +10,8 @@ import { ContentCard } from '../../components/ContentCard';
 import { HeaderMode } from '../../components/Header';
 import { styledComponents, styles } from './styles';
 
+import * as mocked from './mock';
+
 interface ICardData {
   id: number,
   days: string,
@@ -36,49 +38,6 @@ const Login = (): JSX.Element => {
     OrangeButton,
   } = styledComponents;
 
-  const mockMedicineData = {
-    name: 'ACETATO DE MEDROXIPROGESTERONA 1',
-    unit: 'Ampolas',
-  };
-
-  const mockSchedules = [
-    {
-      id: 1, days: 'Dom, Seg, Ter', time: '14:30', quantity: 2,
-    },
-    {
-      id: 2, days: 'Dom, Seg, Ter', time: '19:30', quantity: 2,
-    },
-    {
-      id: 3, days: 'Sab', time: '19:30', quantity: 2,
-    },
-  ];
-
-  const mockAlarms = [
-    {
-      id: 1, days: 'Dom, Seg, Ter', time: '14:30', quantity: 2,
-    },
-    {
-      id: 2, days: 'Dom, Seg, Ter', time: '19:30', quantity: 2,
-    },
-  ];
-
-  const mockStock = 5;
-
-  const mockHistoric = [
-    {
-      id: 1, datetime: 'Seg (26/03) - 19:30', quantity: 2, medicated: true,
-    },
-    {
-      id: 2, datetime: 'Seg (26/03) - 14:30', quantity: 2, medicated: true,
-    },
-    {
-      id: 3, datetime: 'Dom (25/03) - 19:30', quantity: 2, medicated: false,
-    },
-    {
-      id: 4, datetime: 'Dom (25/03) - 14:30', quantity: 2, medicated: true,
-    },
-  ];
-
   const submitCallback = (formData: FormikValues): void => {
     console.log(formData);
   };
@@ -87,7 +46,7 @@ const Login = (): JSX.Element => {
     <ContentCard key={d.id} cardStyles={styles.ContentCard}>
       <CardRow>
         <CardHour>{d.time}</CardHour>
-        <CardQuantity>{d.quantity} {mockMedicineData.unit}</CardQuantity>
+        <CardQuantity>{d.quantity} {mocked.medicineData.unit}</CardQuantity>
       </CardRow>
       <CardRow>
         <CardDay>{d.days}</CardDay>
@@ -104,7 +63,7 @@ const Login = (): JSX.Element => {
   );
 
   const renderSchedulers = () : Array<JSX.Element> | JSX.Element => {
-    if (mockSchedules.length === 0) {
+    if (mocked.schedules.length === 0) {
       return (
         <DescText>
           Você ainda não adicionou nenhum horário para este medicamento.
@@ -112,11 +71,11 @@ const Login = (): JSX.Element => {
       );
     }
 
-    return mockSchedules.map(renderCard);
+    return mocked.schedules.map(renderCard);
   };
 
-  const renderAlarms = () : Array<JSX.Element> | JSX.Element => {
-    if (mockAlarms.length === 0) {
+  const renderalarms = () : Array<JSX.Element> | JSX.Element => {
+    if (mocked.alarms.length === 0) {
       return (
         <DescText>
           Você ainda não adicionou nenhum alarme. Adicione para não esquecer de tomar seu remédio.
@@ -124,11 +83,11 @@ const Login = (): JSX.Element => {
       );
     }
 
-    return mockAlarms.map(renderCard);
+    return mocked.alarms.map(renderCard);
   };
 
-  const renderHistoric = () : Array<JSX.Element> | JSX.Element => (
-    mockHistoric.map((h) => (
+  const renderhistoric = () : Array<JSX.Element> | JSX.Element => (
+    mocked.historic.map((h) => (
       <HistRow key={h.id}>
         <HistText style={{ textAlign: 'left' }}>
           {h.datetime}
@@ -140,7 +99,7 @@ const Login = (): JSX.Element => {
             color: h.medicated ? '#219653' : '#EB5757',
           }}
         >
-          {h.medicated ? `Medicado - ${h.quantity} ${mockMedicineData.unit}` : 'Não medicado'}
+          {h.medicated ? `Medicado - ${h.quantity} ${mocked.medicineData.unit}` : 'Não medicado'}
         </HistText>
       </HistRow>
     ))
@@ -173,7 +132,7 @@ const Login = (): JSX.Element => {
                 fieldName="name"
                 formikHelpers={formikHelpers}
                 placeholder="Coloque aqui o nome do medicamento"
-                value={mockMedicineData.name} // TODO - remove this after backend is done
+                value={mocked.medicineData.name} // TODO - remove this after backend is done
                 label="Nome"
                 mode="flat"
                 onBlur={() => formikHelpers.handleSubmit()}
@@ -183,7 +142,7 @@ const Login = (): JSX.Element => {
                 fieldName="unit"
                 formikHelpers={formikHelpers}
                 placeholder="E.x.: Comprimido, mL, g, mg"
-                value={mockMedicineData.unit} // TODO - remove this after backend is done
+                value={mocked.medicineData.unit} // TODO - remove this after backend is done
                 label="Unidade de medida"
                 mode="flat"
                 onBlur={() => formikHelpers.handleSubmit()}
@@ -201,14 +160,14 @@ const Login = (): JSX.Element => {
                 <GreenButton>
                   <ButtonTextWhite>Cadastrar novo alarme --</ButtonTextWhite>
                 </GreenButton>
-                <>{renderAlarms()}</>
+                <>{renderalarms()}</>
               </MedicineSection>
 
               <MedicineSection title="Estoque">
                 <CustomTextInput
                   fieldName="quantity"
                   formikHelpers={formikHelpers}
-                  value={mockStock.toString()} // TODO - remove this after backend is done
+                  value={mocked.stock.toString()} // TODO - remove this after backend is done
                   label="Quantidade"
                   mode="flat"
                   onBlur={() => formikHelpers.handleSubmit()}
@@ -227,7 +186,7 @@ const Login = (): JSX.Element => {
                 <GrayButton>
                   <ButtonTextBlack>Ver todo o histórico -</ButtonTextBlack>
                 </GrayButton>
-                <>{renderHistoric()}</>
+                <>{renderhistoric()}</>
               </MedicineSection>
             </>
           )}

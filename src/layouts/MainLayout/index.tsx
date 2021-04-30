@@ -35,7 +35,7 @@ export default function MainLayout({
 
   return (
     <LayoutContainer>
-      <Header {...headerConfig} />
+      {/* <Header {...headerConfig} /> */}
       {renderPageContent(disableScrollView)}
     </LayoutContainer>
   );
