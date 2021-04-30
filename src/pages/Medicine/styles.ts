@@ -1,5 +1,5 @@
 import {
-  TextProps, ViewProps, ButtonProps, TouchableOpacityProps,
+  TextProps, ViewProps, TouchableOpacityProps,
 } from 'react-native';
 import styled from 'styled-components/native';
 
