@@ -29,6 +29,47 @@ export const styledComponents = {
     margin-bottom: 15px;
   `,
 
+  CardHour: styled.Text<TextProps>`
+    width: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000000;
+  `,
+
+  CardDay: styled.Text<TextProps>`
+    width: 100%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+  `,
+
+  CardQuantity: styled.Text<TextProps>`
+    font-size: 18px;
+    color: #000000;
+  `,
+
+  CardRow: styled.View<ViewProps>`
+    flex: 1;
+    flex-flow: row;
+    justify-content: space-between;
+    width: 100%;
+  `,
+
+  HistRow: styled.View<ViewProps>`
+    flex: 1;
+    flex-flow: row;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0;
+  `,
+
+  HistText: styled.Text<TextProps>`
+    width: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+  `,
+
   ButtonTextWhite: styled.Text<TextProps>`
     font-size: 17px;
     font-weight: bold;
@@ -52,10 +93,16 @@ export const styledComponents = {
   `,
 
   RedButton: styled(commonsButtonStyles)`
+    max-width: 100px;
+    min-height: 35px;
+    max-height: 35px;
     background-color: #EB5757;
   `,
 
   OrangeButton: styled(commonsButtonStyles)`
+    max-width: 100px;
+    min-height: 35px;
+    max-height: 35px;
     background-color: #F2994A;
   `,
 };

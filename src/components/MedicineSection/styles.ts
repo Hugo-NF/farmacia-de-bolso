@@ -23,6 +23,7 @@ export const styledComponents = {
 
   Title: styled.Text<TextProps>`
     font-size: 22px;
+    font-weight: bold;
     color: #000000;
   `,
 };

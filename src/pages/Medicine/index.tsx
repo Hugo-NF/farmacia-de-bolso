@@ -10,11 +10,24 @@ import { ContentCard } from '../../components/ContentCard';
 import { HeaderMode } from '../../components/Header';
 import { styledComponents, styles } from './styles';
 
+interface ICardData {
+  id: number,
+  days: string,
+  time: string,
+  quantity: number,
+}
+
 const Login = (): JSX.Element => {
   // Styles desestructuring
   const {
     MainContainer,
     DescText,
+    CardHour,
+    CardDay,
+    CardQuantity,
+    CardRow,
+    HistRow,
+    HistText,
     ButtonTextWhite,
     ButtonTextBlack,
     GrayButton,
@@ -34,6 +47,9 @@ const Login = (): JSX.Element => {
     },
     {
       id: 2, days: 'Dom, Seg, Ter', time: '19:30', quantity: 2,
+    },
+    {
+      id: 3, days: 'Sab', time: '19:30', quantity: 2,
     },
   ];
 
@@ -67,7 +83,27 @@ const Login = (): JSX.Element => {
     console.log(formData);
   };
 
-  const renderSchedulers = () : JSX.Element => {
+  const renderCard = (d : ICardData) : JSX.Element => (
+    <ContentCard key={d.id} cardStyles={styles.ContentCard}>
+      <CardRow>
+        <CardHour>{d.time}</CardHour>
+        <CardQuantity>{d.quantity} {mockMedicineData.unit}</CardQuantity>
+      </CardRow>
+      <CardRow>
+        <CardDay>{d.days}</CardDay>
+      </CardRow>
+      <CardRow>
+        <RedButton>
+          <ButtonTextWhite>Excluir -</ButtonTextWhite>
+        </RedButton>
+        <OrangeButton>
+          <ButtonTextWhite>Editar -</ButtonTextWhite>
+        </OrangeButton>
+      </CardRow>
+    </ContentCard>
+  );
+
+  const renderSchedulers = () : Array<JSX.Element> | JSX.Element => {
     if (mockSchedules.length === 0) {
       return (
         <DescText>
@@ -76,18 +112,10 @@ const Login = (): JSX.Element => {
       );
     }
 
-    return (
-      <>
-        {mockSchedules.map((s) => (
-          <ContentCard key={s.id} cardStyles={styles.ContentCard}>
-            <DescText>{`${s.days}, ${s.time}, ${s.quantity}`}</DescText>
-          </ContentCard>
-        ))}
-      </>
-    );
+    return mockSchedules.map(renderCard);
   };
 
-  const renderAlarms = () : JSX.Element => {
+  const renderAlarms = () : Array<JSX.Element> | JSX.Element => {
     if (mockAlarms.length === 0) {
       return (
         <DescText>
@@ -96,23 +124,26 @@ const Login = (): JSX.Element => {
       );
     }
 
-    return (
-      <>
-        {mockAlarms.map((a) => (
-          <ContentCard key={a.id} cardStyles={styles.ContentCard}>
-            <DescText>{`${a.days}, ${a.time}, ${a.quantity}`}</DescText>
-          </ContentCard>
-        ))}
-      </>
-    );
+    return mockAlarms.map(renderCard);
   };
 
-  const renderHistoric = () : JSX.Element => (
-    <>
-      {mockHistoric.map((h) => (
-        <DescText key={h.id}>{`${h.datetime} - ${h.quantity} - ${h.medicated}`}</DescText>
-      ))}
-    </>
+  const renderHistoric = () : Array<JSX.Element> | JSX.Element => (
+    mockHistoric.map((h) => (
+      <HistRow key={h.id}>
+        <HistText style={{ textAlign: 'left' }}>
+          {h.datetime}
+        </HistText>
+        <HistText
+          numberOfLines={1}
+          style={{
+            textAlign: 'right',
+            color: h.medicated ? '#219653' : '#EB5757',
+          }}
+        >
+          {h.medicated ? `Medicado - ${h.quantity} ${mockMedicineData.unit}` : 'Não medicado'}
+        </HistText>
+      </HistRow>
+    ))
   );
 
   return (
@@ -163,14 +194,14 @@ const Login = (): JSX.Element => {
                 <GreenButton>
                   <ButtonTextWhite>Cadastrar novo horário --</ButtonTextWhite>
                 </GreenButton>
-                {renderSchedulers()}
+                <>{renderSchedulers()}</>
               </MedicineSection>
 
               <MedicineSection title="Alarmes">
                 <GreenButton>
                   <ButtonTextWhite>Cadastrar novo alarme --</ButtonTextWhite>
                 </GreenButton>
-                {renderAlarms()}
+                <>{renderAlarms()}</>
               </MedicineSection>
 
               <MedicineSection title="Estoque">
@@ -196,7 +227,7 @@ const Login = (): JSX.Element => {
                 <GrayButton>
                   <ButtonTextBlack>Ver todo o histórico -</ButtonTextBlack>
                 </GrayButton>
-                {renderHistoric()}
+                <>{renderHistoric()}</>
               </MedicineSection>
             </>
           )}
