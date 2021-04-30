@@ -71,12 +71,16 @@ export const styledComponents = {
   `,
 
   ButtonTextWhite: styled.Text<TextProps>`
+    width: 100%;
+    text-align: center;
     font-size: 17px;
     font-weight: bold;
     color: #ffffff;
   `,
 
   ButtonTextBlack: styled.Text<TextProps>`
+    width: 100%;
+    text-align: center;
     font-size: 17px;
     font-weight: bold;
     color: #000000;

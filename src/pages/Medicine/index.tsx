@@ -52,10 +52,10 @@ const Login = (): JSX.Element => {
       </CardRow>
       <CardRow>
         <RedButton>
-          <ButtonTextWhite>Excluir -</ButtonTextWhite>
+          <ButtonTextWhite>Excluir</ButtonTextWhite>
         </RedButton>
         <OrangeButton>
-          <ButtonTextWhite>Editar -</ButtonTextWhite>
+          <ButtonTextWhite>Editar</ButtonTextWhite>
         </OrangeButton>
       </CardRow>
     </ContentCard>
@@ -145,14 +145,14 @@ const Login = (): JSX.Element => {
 
               <MedicineSection title="Horários">
                 <GreenButton>
-                  <ButtonTextWhite>Cadastrar novo horário --</ButtonTextWhite>
+                  <ButtonTextWhite>Cadastrar novo horário</ButtonTextWhite>
                 </GreenButton>
                 <>{renderSchedulers()}</>
               </MedicineSection>
 
               <MedicineSection title="Alarmes">
                 <GreenButton>
-                  <ButtonTextWhite>Cadastrar novo alarme --</ButtonTextWhite>
+                  <ButtonTextWhite>Cadastrar novo alarme</ButtonTextWhite>
                 </GreenButton>
                 <>{renderalarms()}</>
               </MedicineSection>
