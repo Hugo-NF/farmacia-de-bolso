@@ -45,6 +45,9 @@ export const styles = {
   icon: {
     color: Theme.colors.text,
   },
+  portalParagraph: {
+    fontSize: 20,
+  },
   textInput: {
     style: {
       backgroundColor: 'transparent',
