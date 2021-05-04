@@ -1,3 +1,4 @@
+// Exported types.
 export type Medication = {
   alarms: Array<MedicationSchedule>,
   data: MedicationData,

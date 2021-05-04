@@ -1,10 +1,16 @@
 // Package imports.
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // Component imports.
 import { ContentCard } from '../../components/ContentCard';
+
+// Utility imports.
+import {
+  measurementUnitPluralForm,
+  measurementUnitSingularForm,
+} from '../../utils/measurementUnits';
 
 // Layout imports.
 import MainLayout from '../../layouts/MainLayout';
@@ -32,7 +38,7 @@ const MedicationStock = (): JSX.Element => {
         alarms: [],
         data: {
           name: 'Cloridrato de metaformina - 500mg - Ação prolongada',
-          unit: 'comprimidos',
+          unit: 'comprimido',
         },
         history: [],
         schedule: [],
@@ -52,7 +58,7 @@ const MedicationStock = (): JSX.Element => {
         alarms: [],
         data: {
           name: 'Acetato de medroxiprogesterona',
-          unit: 'ampolas',
+          unit: 'ampola',
         },
         history: [],
         schedule: [],
@@ -83,11 +89,18 @@ const MedicationStock = (): JSX.Element => {
 
   function renderMedicationStock(medication : Medication) : JSX.Element {
     function renderStockItemInformation() : JSX.Element {
+      const medicationUnitPluralForm = measurementUnitPluralForm(
+        medication.data.unit,
+      );
+      const medicationUnitSingularForm = measurementUnitSingularForm(
+        medication.data.unit,
+      );
+
       if (medication.stock === 0) {
         return (
           <StockItemInformationRow>
             <StockItemAmountText style={styles.errorText}>
-              {`${medication.stock} ${medication.data.unit}`}
+              {medication.stock} {medicationUnitPluralForm}
             </StockItemAmountText>
             <MaterialIcons
               name="error"
@@ -102,7 +115,11 @@ const MedicationStock = (): JSX.Element => {
         return (
           <StockItemInformationRow>
             <StockItemAmountText style={styles.warningText}>
-              {`${medication.stock} ${medication.data.unit}`}
+              {medication.stock} {
+                medication.stock === 1
+                  ? medicationUnitSingularForm
+                  : medicationUnitPluralForm
+              }
             </StockItemAmountText>
             <MaterialIcons
               name="warning"
@@ -116,17 +133,19 @@ const MedicationStock = (): JSX.Element => {
       return (
         <StockItemInformationRow>
           <StockItemAmountText>
-            {`${medication.stock} ${medication.data.unit}`}
+            {medication.stock} {medicationUnitPluralForm}
           </StockItemAmountText>
         </StockItemInformationRow>
       );
     }
 
     return (
-      <ContentCard cardStyles={styles.stockItem}>
-        <StockItemTitle>{medication.data.name}</StockItemTitle>
-        {renderStockItemInformation()}
-      </ContentCard>
+      <TouchableOpacity>
+        <ContentCard cardStyles={styles.stockItem}>
+          <StockItemTitle>{medication.data.name}</StockItemTitle>
+          {renderStockItemInformation()}
+        </ContentCard>
+      </TouchableOpacity>
     );
   }
 
