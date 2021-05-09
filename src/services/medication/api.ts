@@ -8,7 +8,6 @@ import userAPI from '../user/api';
 import {
   FirebaseCollection,
   FirebaseDocumentRef,
-  FirebaseQuerySnapshot,
 } from '../../typings/firebase';
 import {
   Medication,
