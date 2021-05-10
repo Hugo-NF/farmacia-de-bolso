@@ -23,7 +23,8 @@ export type MedicationData = {
 };
 
 export type MedicationHistory = {
-  history: Array<MedicationHistoryEntry>
+  medicationUID: string,
+  history: Array<MedicationHistoryEntry>,
 };
 
 export type MedicationHistoryEntry = {

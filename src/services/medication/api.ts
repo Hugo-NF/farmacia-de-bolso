@@ -18,33 +18,6 @@ import {
 // Service implementation.
 const api = {
 
-  addEntryToMedicationHistory(
-    medicationHistoryUID : string,
-    medicationHistoryEntry : MedicationHistoryEntry,
-  ) : Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.medicationHistoryDocument(medicationHistoryUID).get()
-        .then((medicationHistory) => {
-          const medicationHistoryData = medicationHistory.data();
-          if (medicationHistoryData !== undefined) {
-            const currentHistory = medicationHistoryData.history;
-            const newHistory = currentHistory.push(medicationHistoryEntry);
-            resolve(
-              this.updateMedicationHistory(
-                medicationHistoryUID,
-                { history: newHistory },
-              ),
-            );
-          } else {
-            reject(
-              new Error('No data found for given medication history UID.'),
-            );
-          }
-        })
-        .catch((err) => reject(err));
-    });
-  },
-
   createMedication(
     medication : Medication,
   ) : Promise<FirebaseDocumentRef> {
@@ -54,13 +27,13 @@ const api = {
     });
   },
 
-  createMedicationHistory(
+  createMedicationHistoryEntry(
     medicationUID : string,
-    medicationHistory : MedicationHistory,
+    medicationHistoryEntry : MedicationHistoryEntry,
   ) : Promise<FirebaseDocumentRef> {
-    return this.medicationFirebaseCollection().add({
+    return this.medicationHistoryEntryFirebaseCollection().add({
       medication: this.medicationDocument(medicationUID),
-      ...medicationHistory,
+      ...medicationHistoryEntry,
     });
   },
 
@@ -68,8 +41,11 @@ const api = {
     return this.medicationDocument(medicationUID).delete();
   },
 
-  deleteMedicationHistory(medicationHistoryUID : string) : Promise<void> {
-    return this.medicationHistoryDocument(medicationHistoryUID).delete();
+  deleteMedicationHistoryEntry(
+    medicationHistoryEntryUID : string,
+  ) : Promise<void> {
+    return this.medicationHistoryEntryDocument(medicationHistoryEntryUID)
+      .delete();
   },
 
   getMedication(
@@ -98,13 +74,14 @@ const api = {
     medicationUID : string,
   ) : Promise<MedicationHistory> {
     return new Promise((resolve, reject) => {
-      this.medicationHistoryFirebaseCollection()
+      this.medicationHistoryEntryFirebaseCollection()
         .where('medication', '==', this.medicationDocument(medicationUID))
         .orderBy('datetime', 'desc')
         .get()
         .then(
           (medicationHistoryEntries) => {
             resolve({
+              medicationUID,
               history: medicationHistoryEntries.docs.map(
                 (historyEntry) => {
                   const historyEntryData = historyEntry.data();
@@ -149,18 +126,19 @@ const api = {
     return this.medicationFirebaseCollection().doc(medicationUID);
   },
 
-  medicationHistoryDocument(
-    medicationHistoryUID : string | undefined,
+  medicationHistoryEntryDocument(
+    medicationHistoryEntryUID : string | undefined,
   ) : FirebaseDocumentRef {
-    return this.medicationHistoryFirebaseCollection().doc(medicationHistoryUID);
+    return this.medicationHistoryEntryFirebaseCollection()
+      .doc(medicationHistoryEntryUID);
   },
 
   medicationFirebaseCollection() : FirebaseCollection {
     return firestore().collection('medications');
   },
 
-  medicationHistoryFirebaseCollection() : FirebaseCollection {
-    return firestore().collection('medicationHistory');
+  medicationHistoryEntryFirebaseCollection() : FirebaseCollection {
+    return firestore().collection('medicationHistoryEntries');
   },
 
   updateMedication(
@@ -172,12 +150,12 @@ const api = {
     }, { merge: true });
   },
 
-  updateMedicationHistory(
-    medicationHistoryUID : string,
-    medicationHistoryData : MedicationHistory,
+  updateMedicationHistoryEntry(
+    medicationHistoryEntryUID : string,
+    medicationHistoryEntryData : MedicationHistoryEntry,
   ) : Promise<void> {
-    return this.medicationHistoryDocument(medicationHistoryUID).set({
-      ...medicationHistoryData,
+    return this.medicationHistoryEntryDocument(medicationHistoryEntryUID).set({
+      ...medicationHistoryEntryData,
     }, { merge: true });
   },
 
