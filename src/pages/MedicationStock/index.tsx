@@ -1,16 +1,21 @@
 // Package imports.
-import React from 'react';
-import { FlatList, TouchableOpacity } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { Alert, FlatList, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 // Component imports.
 import { ContentCard } from '../../components/ContentCard';
+import LoadingIcon from '../../components/LoadingIcon';
 
 // Utility imports.
 import {
   measurementUnitPluralForm,
   measurementUnitSingularForm,
 } from '../../utils/measurementUnits';
+
+// Service imports.
+import medicationAPI from '../../services/medication/api';
 
 // Layout imports.
 import MainLayout from '../../layouts/MainLayout';
@@ -23,6 +28,11 @@ import { Medication } from '../../typings/medication';
 
 // Component declaration.
 const MedicationStock = (): JSX.Element => {
+  // Variables.
+  const navigation = useNavigation();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [userMedications, setUserMedications] = useState<Array<Medication>>([]);
+
   // Styled components.
   const {
     MainContainer,
@@ -30,6 +40,22 @@ const MedicationStock = (): JSX.Element => {
     StockItemInformationRow,
     StockItemTitle,
   } = styledComponents;
+
+  // Callbacks.
+  const errorAlert = useCallback(() : void => Alert.alert(
+    'Erro!',
+    'Ocorreu um erro no carregamento das informações.\n'
+    + 'Retornando para a página anterior.',
+    [
+      {
+        text: 'Ok',
+        onPress: () => navigation.goBack(),
+      },
+    ],
+    {
+      cancelable: false,
+    },
+  ), [navigation]);
 
   // Functions.
   function medicationStockMock() : Array<Medication> {
@@ -40,7 +66,6 @@ const MedicationStock = (): JSX.Element => {
           name: 'Cloridrato de metaformina - 500mg - Ação prolongada',
           unit: 'comprimido',
         },
-        history: [],
         schedule: [],
         stock: 10,
       },
@@ -50,7 +75,6 @@ const MedicationStock = (): JSX.Element => {
           name: 'Atenolol 25mg',
           unit: 'comprimidos',
         },
-        history: [],
         schedule: [],
         stock: 0,
       },
@@ -60,7 +84,6 @@ const MedicationStock = (): JSX.Element => {
           name: 'Acetato de medroxiprogesterona',
           unit: 'ampola',
         },
-        history: [],
         schedule: [],
         stock: 2,
       },
@@ -70,7 +93,6 @@ const MedicationStock = (): JSX.Element => {
           name: 'Geriol 500mg',
           unit: 'comprimidos',
         },
-        history: [],
         schedule: [],
         stock: 26,
       },
@@ -80,7 +102,6 @@ const MedicationStock = (): JSX.Element => {
           name: 'Losartánica Potássica 50mg',
           unit: 'comprimidos',
         },
-        history: [],
         schedule: [],
         stock: 1,
       },
@@ -149,18 +170,35 @@ const MedicationStock = (): JSX.Element => {
     );
   }
 
+  // Page effects.
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      medicationAPI.getCurrentUserMedications()
+        .then((fetchedUserMedications) => {
+          setUserMedications(fetchedUserMedications);
+        })
+        .catch(() => errorAlert())
+        .finally(() => setLoading(false));
+    }, [errorAlert]),
+  );
+
   // JSX returned.
   return (
-    <MainLayout disableScrollView>
-      <MainContainer>
-        <FlatList
-          data={medicationStockMock()}
-          renderItem={({ item }) => renderMedicationStock(item)}
-          keyExtractor={(item) => item.data.name}
-          contentContainerStyle={styles.flatlistMenu}
-        />
-      </MainContainer>
-    </MainLayout>
+    loading === true
+      ? <LoadingIcon />
+      : (
+        <MainLayout disableScrollView>
+          <MainContainer>
+            <FlatList
+              data={userMedications}
+              renderItem={({ item }) => renderMedicationStock(item)}
+              keyExtractor={(item) => item.data.name}
+              contentContainerStyle={styles.flatlistMenu}
+            />
+          </MainContainer>
+        </MainLayout>
+      )
   );
 };
 
