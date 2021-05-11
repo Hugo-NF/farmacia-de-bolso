@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 import MainLayout from '../../layouts/MainLayout';
 import CustomTextInput from '../../components/CustomTextInput';
-import MedicineSection from '../../components/MedicineSection';
+import MedicationSection from '../../components/MedicationSection';
 import { ContentCard } from '../../components/ContentCard';
 import { styledComponents, styles } from './styles';
 
@@ -45,7 +45,7 @@ const Login = (): JSX.Element => {
     <ContentCard key={d.id} cardStyles={styles.ContentCard}>
       <CardRow>
         <CardHour>{d.time}</CardHour>
-        <CardQuantity>{d.quantity} {mocked.medicineData.unit}</CardQuantity>
+        <CardQuantity>{d.quantity} {mocked.medicationData.unit}</CardQuantity>
       </CardRow>
       <CardRow>
         <CardDay>{d.days}</CardDay>
@@ -98,7 +98,7 @@ const Login = (): JSX.Element => {
             color: h.medicated ? '#219653' : '#EB5757',
           }}
         >
-          {h.medicated ? `Medicado - ${h.quantity} ${mocked.medicineData.unit}` : 'Não medicado'}
+          {h.medicated ? `Medicado - ${h.quantity} ${mocked.medicationData.unit}` : 'Não medicado'}
         </HistText>
       </HistRow>
     ))
@@ -126,7 +126,7 @@ const Login = (): JSX.Element => {
                 fieldName="name"
                 formikHelpers={formikHelpers}
                 placeholder="Coloque aqui o nome do medicamento"
-                value={mocked.medicineData.name} // TODO - remove this after backend is done
+                value={mocked.medicationData.name} // TODO - remove this after backend is done
                 label="Nome"
                 mode="flat"
                 onBlur={() => formikHelpers.handleSubmit()}
@@ -136,28 +136,28 @@ const Login = (): JSX.Element => {
                 fieldName="unit"
                 formikHelpers={formikHelpers}
                 placeholder="E.x.: Comprimido, mL, g, mg"
-                value={mocked.medicineData.unit} // TODO - remove this after backend is done
+                value={mocked.medicationData.unit} // TODO - remove this after backend is done
                 label="Unidade de medida"
                 mode="flat"
                 onBlur={() => formikHelpers.handleSubmit()}
                 {...styles.textInput}
               />
 
-              <MedicineSection title="Horários">
+              <MedicationSection title="Horários">
                 <GreenButton>
                   <ButtonTextWhite>Cadastrar novo horário</ButtonTextWhite>
                 </GreenButton>
                 <>{renderSchedulers()}</>
-              </MedicineSection>
+              </MedicationSection>
 
-              <MedicineSection title="Alarmes">
+              <MedicationSection title="Alarmes">
                 <GreenButton>
                   <ButtonTextWhite>Cadastrar novo alarme</ButtonTextWhite>
                 </GreenButton>
                 <>{renderalarms()}</>
-              </MedicineSection>
+              </MedicationSection>
 
-              <MedicineSection title="Estoque">
+              <MedicationSection title="Estoque">
                 <CustomTextInput
                   fieldName="quantity"
                   formikHelpers={formikHelpers}
@@ -170,9 +170,9 @@ const Login = (): JSX.Element => {
                 <DescText>
                   Mantenha atualizado seu estoque, assim podemos lhe dizer quando estiver perto de acabar.
                 </DescText>
-              </MedicineSection>
+              </MedicationSection>
 
-              <MedicineSection title="Histórico - Resumo">
+              <MedicationSection title="Histórico - Resumo">
                 <DescText>
                   Aqui é um breve resumo, onde você poderá ver seu histórico parcial (última semana).
                   Poderá ver quando tomou esse medicamento, e quantos.
@@ -181,7 +181,7 @@ const Login = (): JSX.Element => {
                   <ButtonTextBlack>Ver todo o histórico -</ButtonTextBlack>
                 </GrayButton>
                 <>{renderhistoric()}</>
-              </MedicineSection>
+              </MedicationSection>
             </>
           )}
         </Formik>

@@ -1,4 +1,4 @@
-export const medicineData = {
+export const medicationData = {
   name: 'ACETATO DE MEDROXIPROGESTERONA 1',
   unit: 'Ampolas',
 };

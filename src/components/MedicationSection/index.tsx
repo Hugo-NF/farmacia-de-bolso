@@ -3,16 +3,16 @@ import { styledComponents } from './styles';
 
 import HeaderHelpButton from '../HeaderHelpButton';
 
-export interface IMedicineSectionProps {
+export interface IMedicationSectionProps {
   title: string,
   helpText?: string,
   children?: JSX.Element | Array<JSX.Element>;
 }
 
-const MedicineSection = ({
+const MedicationSection = ({
   title,
   children,
-}: IMedicineSectionProps): JSX.Element => {
+}: IMedicationSectionProps): JSX.Element => {
   const {
     Container,
     Header,
@@ -33,8 +33,8 @@ const MedicineSection = ({
   );
 };
 
-export default MedicineSection;
+export default MedicationSection;
 
-MedicineSection.defaultProps = {
+MedicationSection.defaultProps = {
   children: (<></>),
 };

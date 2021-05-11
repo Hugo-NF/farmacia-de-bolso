@@ -4,19 +4,19 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MainMenu from './pages/MainMenu';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import Medicine from './pages/Medicine';
+import Medication from './pages/Medication';
 
 const Stack = createStackNavigator();
 
 const Routes = (): JSX.Element => (
   <Stack.Navigator
-    initialRouteName="Medicine"
+    initialRouteName="Medication"
     screenOptions={{ headerShown: false }}
   >
     <Stack.Screen name="MainMenu" component={MainMenu} options={{ title: 'Menu principal' }} />
     <Stack.Screen name="Login" component={Login} options={{ title: 'Login' }} />
     <Stack.Screen name="Register" component={Register} options={{ title: 'Cadastro' }} />
-    <Stack.Screen name="Medicine" component={Medicine} options={{ title: 'Medicamentos' }} />
+    <Stack.Screen name="Medication" component={Medication} options={{ title: 'Medicamentos' }} />
   </Stack.Navigator>
 );
 
