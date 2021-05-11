@@ -35,6 +35,7 @@ const MedicationStock = (): JSX.Element => {
 
   // Styled components.
   const {
+    LargeText,
     MainContainer,
     StockItemAmountText,
     StockItemInformationRow,
@@ -58,56 +59,6 @@ const MedicationStock = (): JSX.Element => {
   ), [navigation]);
 
   // Functions.
-  function medicationStockMock() : Array<Medication> {
-    return [
-      {
-        alarms: [],
-        data: {
-          name: 'Cloridrato de metaformina - 500mg - Ação prolongada',
-          unit: 'comprimido',
-        },
-        schedule: [],
-        stock: 10,
-      },
-      {
-        alarms: [],
-        data: {
-          name: 'Atenolol 25mg',
-          unit: 'comprimidos',
-        },
-        schedule: [],
-        stock: 0,
-      },
-      {
-        alarms: [],
-        data: {
-          name: 'Acetato de medroxiprogesterona',
-          unit: 'ampola',
-        },
-        schedule: [],
-        stock: 2,
-      },
-      {
-        alarms: [],
-        data: {
-          name: 'Geriol 500mg',
-          unit: 'comprimidos',
-        },
-        schedule: [],
-        stock: 26,
-      },
-      {
-        alarms: [],
-        data: {
-          name: 'Losartánica Potássica 50mg',
-          unit: 'comprimidos',
-        },
-        schedule: [],
-        stock: 1,
-      },
-    ];
-  }
-
   function renderMedicationStock(medication : Medication) : JSX.Element {
     function renderStockItemInformation() : JSX.Element {
       const medicationUnitPluralForm = measurementUnitPluralForm(
@@ -184,21 +135,23 @@ const MedicationStock = (): JSX.Element => {
   );
 
   // JSX returned.
+  if (loading === true) return (<LoadingIcon />);
+
   return (
-    loading === true
-      ? <LoadingIcon />
-      : (
-        <MainLayout disableScrollView>
-          <MainContainer>
+    <MainLayout disableScrollView>
+      <MainContainer>
+        {userMedications.length === 0
+          ? (<LargeText>Nenhum medicamento cadastrado!</LargeText>)
+          : (
             <FlatList
               data={userMedications}
               renderItem={({ item }) => renderMedicationStock(item)}
               keyExtractor={(item) => item.data.name}
               contentContainerStyle={styles.flatlistMenu}
             />
-          </MainContainer>
-        </MainLayout>
-      )
+          )}
+      </MainContainer>
+    </MainLayout>
   );
 };
 

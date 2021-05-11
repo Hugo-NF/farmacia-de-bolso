@@ -48,6 +48,30 @@ const api = {
       .delete();
   },
 
+  getCurrentUserMedications(): Promise<Array<Medication>> {
+    return new Promise((resolve, reject) => {
+      this.medicationFirebaseCollection()
+        .where('user', '==', userAPI.currentUserDocument())
+        .get()
+        .then((userMedications) => {
+          resolve(
+            userMedications.docs.map((userMedicationDoc) => {
+              const userMedicationDocData = userMedicationDoc.data();
+              return ({
+                alarms: userMedicationDocData.alarms,
+                data: userMedicationDocData.data,
+                schedule: userMedicationDocData.schedule,
+                stock: userMedicationDocData.stock,
+              });
+            }),
+          );
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
   getMedication(
     medicationUID : string,
   ) : Promise<Medication> {
@@ -95,29 +119,6 @@ const api = {
             });
           },
         )
-        .catch((err) => reject(err));
-    });
-  },
-
-  getCurrentUserMedications(): Promise<Array<Medication>> {
-    return new Promise((resolve, reject) => {
-      this.medicationFirebaseCollection()
-        .where('user', '==', userAPI.currentUserDocument())
-        .get()
-        .then((userMedications) => {
-          resolve(
-            userMedications.docs.map((userMedicationDoc) => {
-              const userMedicationDocData = userMedicationDoc.data();
-
-              return ({
-                alarms: userMedicationDocData.alarms,
-                data: userMedicationDocData.data,
-                schedule: userMedicationDocData.schedule,
-                stock: userMedicationDocData.stock,
-              });
-            }),
-          );
-        })
         .catch((err) => reject(err));
     });
   },

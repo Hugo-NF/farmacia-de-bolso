@@ -25,22 +25,11 @@ const api = {
   },
 
   currentUser() : FirebaseUser | null {
-    const authContext = useAuthContext();
-    return authContext.currentUser;
+    return auth().currentUser;
   },
 
   currentUserDocument() : FirebaseDocumentRef {
     return this.userDocument(this.currentUser()?.uid);
-  },
-
-  currentUserResolved() : Promise<FirebaseUser | null> {
-    const authContext = useAuthContext();
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        while (authContext.loadingCurrentUser);
-        resolve(authContext.currentUser);
-      }, 1000);
-    });
   },
 
   getReference(
