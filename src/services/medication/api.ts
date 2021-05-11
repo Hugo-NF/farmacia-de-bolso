@@ -59,6 +59,7 @@ const api = {
               const userMedicationDocData = userMedicationDoc.data();
 
               return ({
+                id: userMedicationDoc.id,
                 alarms: userMedicationDocData.alarms,
                 data: userMedicationDocData.data,
                 schedule: userMedicationDocData.schedule,
@@ -80,6 +81,7 @@ const api = {
           const medicationData = medication.data();
           if (medicationData !== undefined) {
             resolve({
+              id: medication.id,
               alarms: medicationData.alarms,
               data: medicationData.data,
               schedule: medicationData.schedule,
