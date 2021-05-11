@@ -11,10 +11,17 @@ export enum WeekDays {
 
 // Exported types.
 export type Medication = {
-  alarms: Array<MedicationSchedule>,
+  id: string,
+  alarms: Array<Schedule>,
   data: MedicationData,
-  schedule: Array<MedicationSchedule>,
+  schedule: Array<Schedule>,
   stock: number,
+};
+
+export type MedicationAlarm = {
+  id: string,
+  medicationName: string,
+  schedule: Schedule,
 };
 
 export type MedicationData = {
@@ -33,7 +40,7 @@ export type MedicationHistoryEntry = {
   quantity: number,
 };
 
-export type MedicationSchedule = {
+export type Schedule = {
   days: Array<WeekDays>,
   quantity: number,
   time: TimeOfDay,
