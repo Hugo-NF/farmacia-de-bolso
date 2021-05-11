@@ -146,7 +146,7 @@ const MedicationStock = (): JSX.Element => {
             <FlatList
               data={userMedications}
               renderItem={({ item }) => renderMedicationStock(item)}
-              keyExtractor={(item) => item.data.name}
+              keyExtractor={(item) => item.id}
               contentContainerStyle={styles.flatlistMenu}
             />
           )}
