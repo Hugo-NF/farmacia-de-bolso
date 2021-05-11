@@ -6,9 +6,6 @@ import firestore from '@react-native-firebase/firestore';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
 
-// Context imports.
-import { useAuthContext } from '../../contexts/auth';
-
 // Service implementation.
 const api = {
 
@@ -19,22 +16,11 @@ const api = {
   },
 
   currentUser() : FirebaseAuthTypes.User | null {
-    const authContext = useAuthContext();
-    return authContext.currentUser;
+    return auth().currentUser;
   },
 
   currentUserDocument() : FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData> {
     return this.userDocument(this.currentUser()?.uid);
-  },
-
-  currentUserResolved() : Promise<FirebaseAuthTypes.User | null> {
-    const authContext = useAuthContext();
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        while (authContext.loadingCurrentUser);
-        resolve(authContext.currentUser);
-      }, 1000);
-    });
   },
 
   getReference(
