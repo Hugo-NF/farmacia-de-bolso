@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import theme from 'constants/theme';
 
 export const styleSheet = StyleSheet.create({
   positioning: {
@@ -8,7 +9,7 @@ export const styleSheet = StyleSheet.create({
   },
   button: {
     borderRadius: 9999,
-    backgroundColor: '#2F80ED',
+    backgroundColor: theme.colors.accent,
     padding: 3,
     aspectRatio: 1,
   },
