@@ -13,6 +13,7 @@ import {
   Medication,
   MedicationHistory,
   MedicationHistoryEntry,
+  MedicationSchedule,
 } from '../../typings/medication';
 
 // Service implementation.
@@ -46,6 +47,28 @@ const api = {
   ) : Promise<void> {
     return this.medicationHistoryEntryDocument(medicationHistoryEntryUID)
       .delete();
+  },
+
+  getCurrentUserAlarms(): Promise<Array<MedicationSchedule>> {
+    return new Promise((resolve, reject) => {
+      this.getCurrentUserMedications()
+        .then((userMedications) => {
+          const userAlarms: Array<MedicationSchedule> = [];
+
+          userMedications.forEach((userMedication) => {
+            userMedication.alarms.forEach((medicationAlarm, alarmIndex) => {
+              userAlarms.push({
+                id: `${userMedication.id}_${alarmIndex}`,
+                medicationData: userMedication.data,
+                schedule: medicationAlarm,
+              });
+            });
+          });
+
+          resolve(userAlarms);
+        })
+        .catch((err) => reject(err));
+    });
   },
 
   getCurrentUserMedications(): Promise<Array<Medication>> {
