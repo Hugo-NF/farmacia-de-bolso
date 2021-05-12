@@ -28,7 +28,7 @@ const MainMenu = (): JSX.Element => {
     },
     {
       name: 'Alarmes',
-      destination: 'MainMenu',
+      destination: 'MedicationAlarms',
       icon: 'bell-ring-outline',
       iconColor: styles.menuItemIconColors.bell,
     },

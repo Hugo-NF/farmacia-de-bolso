@@ -14,6 +14,7 @@ const theme = {
     success: '#27AE60',
     error: '#EB5757',
     text: 'black',
+    darkText: '#000',
     onSurface: '#000000',
     warning: '#F2994A',
     success: '#27AE60',
