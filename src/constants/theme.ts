@@ -13,6 +13,7 @@ const theme = {
     surface: 'white',
     error: '#B00020',
     text: 'black',
+    darkText: '#000',
     onSurface: '#000000',
   },
   animation: {

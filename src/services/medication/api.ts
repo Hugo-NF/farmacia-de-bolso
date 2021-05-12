@@ -4,6 +4,9 @@ import firestore from '@react-native-firebase/firestore';
 // Service imports.
 import userAPI from '../user/api';
 
+// Utils imports.
+import { sortSchedules } from '../../utils/medicationSchedule';
+
 // Type imports.
 import {
   FirebaseCollection,
@@ -56,13 +59,15 @@ const api = {
           const userAlarms: Array<MedicationSchedule> = [];
 
           userMedications.forEach((userMedication) => {
-            userMedication.alarms.forEach((medicationAlarm, alarmIndex) => {
-              userAlarms.push({
-                id: `${userMedication.id}_${alarmIndex}`,
-                medicationData: userMedication.data,
-                schedule: medicationAlarm,
+            userMedication.alarms
+              .sort(sortSchedules)
+              .forEach((medicationAlarm, alarmIndex) => {
+                userAlarms.push({
+                  id: `${userMedication.id}_${alarmIndex}`,
+                  medicationData: userMedication.data,
+                  schedule: medicationAlarm,
+                });
               });
-            });
           });
 
           resolve(userAlarms);

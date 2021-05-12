@@ -3,9 +3,16 @@
 // Package imports.
 import Lodash from 'lodash';
 
+// Util imports.
+import {
+  measurementUnitPluralForm,
+  measurementUnitSingularForm,
+} from './measurementUnits';
+
 // Type imports.
 import {
   MedicationSchedule,
+  Schedule,
   WeekDays,
   WeekDaysAbbreviations,
 } from '../typings/medication';
@@ -25,13 +32,30 @@ export function medicationScheduleDaysToText(
     WeekDays.Saturday,
   ];
 
-  if (Lodash.difference(scheduleDays, allWeekDays).length === 0) {
+  if (Lodash.difference(allWeekDays, scheduleDays).length === 0) {
     return 'Todos os dias';
   }
 
   return scheduleDays
+    .sort()
     .map((scheduleDay) => WeekDaysAbbreviations[scheduleDay])
     .join(', ');
+}
+
+export function medicationScheduleDosage(
+  medicationSchedule : MedicationSchedule,
+) : string {
+  const medicationQuantity = medicationSchedule.schedule.quantity;
+
+  if (medicationQuantity === 1) {
+    return `${medicationQuantity} ${
+      measurementUnitSingularForm(medicationSchedule.medicationData.unit)
+    }`;
+  }
+
+  return `${medicationQuantity} ${
+    measurementUnitPluralForm(medicationSchedule.medicationData.unit)
+  }`;
 }
 
 export function medicationScheduleTime(
@@ -45,4 +69,15 @@ export function medicationScheduleTime(
   );
 
   return `${hourPaddedWithZeros}:${minutePaddedWithZeros}`;
+}
+
+export function sortSchedules(
+  schedule1 : Schedule,
+  schedule2 : Schedule,
+) : number {
+  if (schedule1.time.hour !== schedule2.time.hour) {
+    return schedule1.time.hour - schedule2.time.hour;
+  }
+
+  return schedule1.time.minute - schedule2.time.minute;
 }

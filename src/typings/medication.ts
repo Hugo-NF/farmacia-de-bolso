@@ -17,7 +17,7 @@ export const WeekDaysAbbreviations = {
   [WeekDays.Wednesday]: 'Qua',
   [WeekDays.Thursday]: 'Qui',
   [WeekDays.Friday]: 'Sex',
-  [WeekDays.Saturday]: 'Sab',
+  [WeekDays.Saturday]: 'Sáb',
 };
 
 // Exported types.
