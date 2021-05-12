@@ -75,7 +75,7 @@ const MedicationIndex = (): JSX.Element => {
         )}
 
         {/* Loaded and there are items */}
-        {medications !== null && medications.length && (
+        {medications !== null && medications.length > 0 && (
           <FlatList
             data={medications}
             renderItem={({ item }) => renderMedication(item)}

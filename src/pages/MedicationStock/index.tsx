@@ -1,6 +1,6 @@
 // Package imports.
 import React, { useCallback, useState } from 'react';
-import { Alert, FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
@@ -9,6 +9,7 @@ import { ContentCard } from '../../components/ContentCard';
 import LoadingIcon from '../../components/LoadingIcon';
 
 // Utility imports.
+import { createErrorAlert } from '../../utils/errorPopups';
 import {
   measurementUnitPluralForm,
   measurementUnitSingularForm,
@@ -43,20 +44,7 @@ const MedicationStock = (): JSX.Element => {
   } = styledComponents;
 
   // Callbacks.
-  const errorAlert = useCallback(() : void => Alert.alert(
-    'Erro!',
-    'Ocorreu um erro no carregamento das informações.\n'
-    + 'Retornando para a página anterior.',
-    [
-      {
-        text: 'Ok',
-        onPress: () => navigation.goBack(),
-      },
-    ],
-    {
-      cancelable: false,
-    },
-  ), [navigation]);
+  const errorAlert = createErrorAlert(navigation);
 
   // Functions.
   function renderMedicationStock(medication : Medication) : JSX.Element {
@@ -112,7 +100,11 @@ const MedicationStock = (): JSX.Element => {
     }
 
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(
+          'Medication', { medicationId: medication.id },
+        )}
+      >
         <ContentCard cardStyles={styles.stockItem}>
           <StockItemTitle>{medication.data.name}</StockItemTitle>
           {renderStockItemInformation()}
