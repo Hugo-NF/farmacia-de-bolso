@@ -4,6 +4,9 @@ import firestore from '@react-native-firebase/firestore';
 // Service imports.
 import userAPI from '../user/api';
 
+// Utils imports.
+import { sortSchedules } from '../../utils/medicationSchedule';
+
 // Type imports.
 import {
   FirebaseCollection,
@@ -13,6 +16,7 @@ import {
   Medication,
   MedicationHistory,
   MedicationHistoryEntry,
+  MedicationSchedule,
 } from '../../typings/medication';
 
 // Service implementation.
@@ -48,6 +52,30 @@ const api = {
       .delete();
   },
 
+  getCurrentUserAlarms(): Promise<Array<MedicationSchedule>> {
+    return new Promise((resolve, reject) => {
+      this.getCurrentUserMedications()
+        .then((userMedications) => {
+          const userAlarms: Array<MedicationSchedule> = [];
+
+          userMedications.forEach((userMedication) => {
+            userMedication.alarms
+              .sort(sortSchedules)
+              .forEach((medicationAlarm, alarmIndex) => {
+                userAlarms.push({
+                  id: `${userMedication.id}_${alarmIndex}`,
+                  medicationData: userMedication.data,
+                  schedule: medicationAlarm,
+                });
+              });
+          });
+
+          resolve(userAlarms);
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   getCurrentUserMedications(): Promise<Array<Medication>> {
     return new Promise((resolve, reject) => {
       this.medicationFirebaseCollection()
@@ -57,6 +85,7 @@ const api = {
           resolve(
             userMedications.docs.map((userMedicationDoc) => {
               const userMedicationDocData = userMedicationDoc.data();
+
               return ({
                 id: userMedicationDoc.id,
                 alarms: userMedicationDocData.alarms,
@@ -67,9 +96,7 @@ const api = {
             }),
           );
         })
-        .catch((err) => {
-          reject(err);
-        });
+        .catch((err) => reject(err));
     });
   },
 

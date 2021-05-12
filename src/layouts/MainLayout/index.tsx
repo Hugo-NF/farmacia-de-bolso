@@ -3,7 +3,10 @@ import React from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import Header, { IHeaderProps } from 'components/Header';
 import theme from 'constants/theme';
+import Constants from 'expo-constants';
 
+import { View } from 'react-native';
+import { Theme } from 'constants/index';
 import { styledComponents } from './styles';
 
 interface IMainLayoutProps {
@@ -22,13 +25,19 @@ export default function MainLayout({
   const renderPageContent = (disableScroll: boolean): JSX.Element => {
     const pageChild = (children);
 
-    return disableScroll ? pageChild : (
+    return disableScroll ? (
+      <>
+        <Header {...headerConfig} />
+        {pageChild}
+      </>
+    ) : (
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'space-between',
         }}
       >
+        <Header {...headerConfig} />
         {pageChild}
       </ScrollView>
     );
@@ -36,7 +45,7 @@ export default function MainLayout({
 
   return (
     <LayoutContainer style={{ backgroundColor: theme.colors.background }}>
-      <Header {...headerConfig} />
+      <View style={{ width: '100%', height: Constants.statusBarHeight, backgroundColor: Theme.colors.primary }} />
       {renderPageContent(disableScrollView)}
     </LayoutContainer>
   );
