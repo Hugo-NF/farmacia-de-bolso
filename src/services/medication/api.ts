@@ -102,6 +102,7 @@ const api = {
               .forEach((medicationAlarm) => {
                 userAlarms.push({
                   id: uuid(),
+                  medicationId: userMedication.id,
                   medicationData: userMedication.data,
                   schedule: medicationAlarm,
                 });
