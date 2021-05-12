@@ -94,7 +94,25 @@ const CreateScheduleDialog = ({
           />
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={() => setVisible(false)} color={theme.colors.error}>Cancelar</Button>
+          <Button
+            onPress={() => {
+              setVisible(false);
+              setTime(new Date());
+              setChecked({
+                0: false,
+                1: false,
+                2: false,
+                3: false,
+                4: false,
+                5: false,
+                6: false,
+              });
+              setQuantity('');
+            }}
+            color={theme.colors.error}
+          >
+            Cancelar
+          </Button>
           <Button
             onPress={() => {
               if (time !== undefined) {
@@ -108,6 +126,18 @@ const CreateScheduleDialog = ({
                   },
                 };
                 onSave(newSchedule);
+
+                setTime(new Date());
+                setChecked({
+                  0: false,
+                  1: false,
+                  2: false,
+                  3: false,
+                  4: false,
+                  5: false,
+                  6: false,
+                });
+                setQuantity('');
                 setVisible(false);
               }
             }}

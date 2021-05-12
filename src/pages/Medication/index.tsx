@@ -49,7 +49,8 @@ const MedicationPage = (): JSX.Element => {
   const medicationId = useRoute<RouteProp<RoutesParams, 'Medication'>>().params?.medicationId;
 
   const [medication, setMedication] = useState<Medication>();
-  const [visible, setVisible] = useState<boolean>(false);
+  const [scheduleVisible, setScheduleVisible] = useState<boolean>(false);
+  const [alarmVisible, setAlarmVisible] = useState<boolean>(false);
 
   const submitCallback = (formData: FormikValues): void => {
     const medicationData = {
@@ -141,9 +142,14 @@ const MedicationPage = (): JSX.Element => {
     >
       <MainContainer>
         <CreateScheduleDialog
-          visible={visible}
-          setVisible={setVisible}
-          onSave={(schedule) => console.log(schedule)}
+          visible={scheduleVisible}
+          setVisible={setScheduleVisible}
+          onSave={(schedule) => console.log('S', schedule)}
+        />
+        <CreateScheduleDialog
+          visible={alarmVisible}
+          setVisible={setAlarmVisible}
+          onSave={(alarm) => console.log('A', alarm)}
         />
         <Formik
           initialValues={{
@@ -182,14 +188,14 @@ const MedicationPage = (): JSX.Element => {
               />
 
               <MedicationSection title="Horários">
-                <GreenButton onPress={() => setVisible(true)}>
+                <GreenButton onPress={() => setScheduleVisible(true)}>
                   <ButtonTextWhite>Cadastrar novo horário</ButtonTextWhite>
                 </GreenButton>
                 {/* {renderSchedule()} */}
               </MedicationSection>
 
               <MedicationSection title="Alarmes">
-                <GreenButton onPress={() => setVisible(true)}>
+                <GreenButton onPress={() => setAlarmVisible(true)}>
                   <ButtonTextWhite>Cadastrar novo alarme</ButtonTextWhite>
                 </GreenButton>
                 {/* {renderAlarms()} */}
