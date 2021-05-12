@@ -45,7 +45,7 @@ export const styledComponents = {
 export const styleSheet = StyleSheet.create({
   text: {
     color: 'white',
-    fontSize: 25,
+    fontSize: 22,
   },
   icon: {
     letterSpacing: -20,

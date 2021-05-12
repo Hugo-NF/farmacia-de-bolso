@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
+import { useAuthContext } from 'contexts/auth';
 import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,7 +15,7 @@ const NavBar = (): JSX.Element => {
   } = styledComponents;
 
   const { canGoBack, goBack } = useNavigation();
-
+  const { currentUser } = useAuthContext();
   return (
     <Container>
       { canGoBack()
@@ -34,8 +35,7 @@ const NavBar = (): JSX.Element => {
         : <View />}
       <TouchableOpacity>
         <ProfileView>
-          <Text style={styleSheet.text}>Hugo Fonseca</Text>
-          <ProfilePicture source={{ uri: 'https://picsum.photos/200/200' }} />
+          <Text style={styleSheet.text}>{currentUser?.email}</Text>
         </ProfileView>
       </TouchableOpacity>
     </Container>
