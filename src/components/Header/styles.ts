@@ -1,12 +1,13 @@
 // Package imports.
 import { ViewProps } from 'react-native';
 import styled from 'styled-components/native';
+import theme from 'constants/theme';
 
 // Styled components.
 export const styledComponents = {
 
   HeaderBackground: styled.View<ViewProps>`
-    background-color: #56CCF2;
+    background-color: ${theme.colors.primary};
     border-radius: 9999px;
     position: absolute;
     left: -140px;

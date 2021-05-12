@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Formik, FormikValues } from 'formik';
+import {
+  Button, Dialog, Paragraph, Portal,
+} from 'react-native-paper';
 import * as Yup from 'yup';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 import MainLayout from '../../layouts/MainLayout';
 
@@ -11,7 +15,19 @@ import { Constants } from '../../constants';
 
 import { styledComponents, styles } from './styles';
 
+import userAPI from '../../services/user/api';
+
+import { IDialogState } from '../../typings/dialog';
+
 const Login = (): JSX.Element => {
+  // Variable declaration
+  const navigation = useNavigation();
+  const [dialog, setDialog] = useState<IDialogState>({
+    open: false,
+    title: '',
+    message: '',
+  });
+
   // Styles desestructuring
   const {
     MainContainer,
@@ -20,13 +36,45 @@ const Login = (): JSX.Element => {
     ButtonText,
   } = styledComponents;
 
-  const loginCallback = (formData: FormikValues): void => {
-    console.log(formData);
+  const loginCallback = async (formData: FormikValues): Promise<void> => {
+    function openLoginErrorPopUp() : void {
+      setDialog({
+        open: true,
+        title: 'Autenticação',
+        message: 'E-mail ou senha incorretos.',
+      });
+    }
+
+    try {
+      const response = await userAPI.signIn(formData.email, formData.password);
+
+      if (response.user != null) {
+        navigation.dispatch(StackActions.replace('MainMenu'));
+      } else {
+        openLoginErrorPopUp();
+      }
+    } catch {
+      openLoginErrorPopUp();
+    }
   };
 
   return (
     <MainLayout>
       <MainContainer>
+        <Portal>
+          <Dialog
+            visible={dialog.open}
+            onDismiss={() => setDialog({ ...dialog, open: false })}
+          >
+            <Dialog.Title>{dialog.title}</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph style={styles.portalParagraph}>{dialog.message}</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => setDialog({ ...dialog, open: false })}>Fechar</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
         <Title>Digite seu e-mail e senha para acessar o aplicativo</Title>
 
         <Formik

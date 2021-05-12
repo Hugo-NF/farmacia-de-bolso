@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 import { Formik, FormikValues } from 'formik';
-import TextInputMask from 'react-native-text-input-mask';
-import * as Yup from 'yup';
-
 import {
   Button, Dialog, Paragraph, Portal,
 } from 'react-native-paper';
+import TextInputMask from 'react-native-text-input-mask';
+import * as Yup from 'yup';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 import MainLayout from '../../layouts/MainLayout';
 
@@ -18,7 +18,10 @@ import { Constants } from '../../constants';
 
 import { styledComponents, styles } from './styles';
 
+import userAPI from '../../services/user/api';
+
 const Register = (): JSX.Element => {
+  const navigation = useNavigation();
   const [dialog, setDialog] = useState<IDialogState>({
     open: false,
     title: '',
@@ -33,8 +36,43 @@ const Register = (): JSX.Element => {
     SignUpButton,
   } = styledComponents;
 
-  const signUp = (formData: FormikValues): void => {
-    console.log(formData);
+  const signUp = async (formData: FormikValues): Promise<void> => {
+    try {
+      const userCredential = await userAPI.createAuth(
+        formData.email, formData.password,
+      );
+      const userUID = userCredential.user.uid;
+
+      const {
+        address,
+        birthDate,
+        city,
+        email,
+        fullName,
+        phoneNumber,
+        state,
+        username,
+      } = formData;
+
+      await userAPI.setDocumentData(userUID, {
+        address,
+        birthDate,
+        city,
+        email,
+        fullName,
+        phoneNumber,
+        state,
+        username,
+      });
+
+      navigation.dispatch(StackActions.replace('MainMenu'));
+    } catch (e) {
+      setDialog({
+        open: true,
+        title: 'Cadastro',
+        message: 'Ocorreu um erro ao realizar seu cadastro! Tente novamente com outro endereço de e-mail.',
+      });
+    }
   };
 
   return (
@@ -47,7 +85,7 @@ const Register = (): JSX.Element => {
           >
             <Dialog.Title>{dialog.title}</Dialog.Title>
             <Dialog.Content>
-              <Paragraph>{dialog.message}</Paragraph>
+              <Paragraph style={styles.portalParagraph}>{dialog.message}</Paragraph>
             </Dialog.Content>
             <Dialog.Actions>
               <Button onPress={() => setDialog({ ...dialog, open: false })}>Fechar</Button>

@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { ScrollView } from 'react-native-gesture-handler';
-import Header, { IHeaderProps } from '../../components/Header';
+import Header, { IHeaderProps } from 'components/Header';
+import theme from 'constants/theme';
 
 import { styledComponents } from './styles';
 
@@ -34,8 +35,8 @@ export default function MainLayout({
   };
 
   return (
-    <LayoutContainer>
-      {/* <Header {...headerConfig} /> */}
+    <LayoutContainer style={{ backgroundColor: theme.colors.background }}>
+      <Header {...headerConfig} />
       {renderPageContent(disableScrollView)}
     </LayoutContainer>
   );
