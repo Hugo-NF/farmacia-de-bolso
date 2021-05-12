@@ -7,6 +7,7 @@ import MainLayout from '../../layouts/MainLayout';
 import CustomTextInput from '../../components/CustomTextInput';
 import MedicationSection from '../../components/MedicationSection';
 import { ContentCard } from '../../components/ContentCard';
+import { HeaderMode } from '../../components/Header';
 import { styledComponents, styles } from './styles';
 
 import * as mocked from './mock';
@@ -105,7 +106,12 @@ const Login = (): JSX.Element => {
   );
 
   return (
-    <MainLayout>
+    <MainLayout
+      headerConfig={{
+        mode: HeaderMode.Custom,
+        children: undefined, // leave empty to not implement medicine image yet
+      }}
+    >
       <MainContainer>
         <Formik
           initialValues={{
