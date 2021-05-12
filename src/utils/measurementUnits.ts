@@ -1,3 +1,5 @@
+// File to hold utils related to medication measument units.
+
 // Private functions.
 function convertMeasurementUnitToPlural(measurementUnit: string) : string {
   return `${measurementUnit}s`;
