@@ -15,6 +15,7 @@ const theme = {
     text: 'black',
     onSurface: '#000000',
     warning: '#F2994A',
+    success: '#27AE60',
   },
   animation: {
     scale: 1.0,

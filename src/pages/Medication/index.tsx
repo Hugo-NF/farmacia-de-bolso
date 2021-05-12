@@ -10,6 +10,7 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import { v4 as uuid } from 'uuid';
 
 import CustomTextInput from 'components/CustomTextInput';
+import CreateScheduleDialog from 'components/CreateScheduleDialog';
 import MedicationSection from 'components/MedicationSection';
 import { ContentCard } from 'components/ContentCard';
 import { HeaderMode } from 'components/Header';
@@ -48,6 +49,7 @@ const MedicationPage = (): JSX.Element => {
   const medicationId = useRoute<RouteProp<RoutesParams, 'Medication'>>().params?.medicationId;
 
   const [medication, setMedication] = useState<Medication>();
+  const [visible, setVisible] = useState<boolean>(false);
 
   const submitCallback = (formData: FormikValues): void => {
     const medicationData = {
@@ -136,6 +138,10 @@ const MedicationPage = (): JSX.Element => {
       }}
     >
       <MainContainer>
+        <CreateScheduleDialog
+          visible={visible}
+          setVisible={setVisible}
+        />
         <Formik
           initialValues={{
             name: '',
@@ -173,14 +179,14 @@ const MedicationPage = (): JSX.Element => {
               />
 
               <MedicationSection title="Horários">
-                <GreenButton>
+                <GreenButton onPress={() => setVisible(true)}>
                   <ButtonTextWhite>Cadastrar novo horário</ButtonTextWhite>
                 </GreenButton>
                 {/* {renderSchedule()} */}
               </MedicationSection>
 
               <MedicationSection title="Alarmes">
-                <GreenButton>
+                <GreenButton onPress={() => setVisible(true)}>
                   <ButtonTextWhite>Cadastrar novo alarme</ButtonTextWhite>
                 </GreenButton>
                 {/* {renderAlarms()} */}
