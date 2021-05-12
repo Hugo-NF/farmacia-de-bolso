@@ -6,6 +6,7 @@ import {
 } from 'react-native-paper';
 import * as Yup from 'yup';
 import { StackActions, useNavigation } from '@react-navigation/native';
+import AlarmManager from 'services/alarm/alarms';
 
 import MainLayout from '../../layouts/MainLayout';
 
@@ -51,6 +52,7 @@ const Login = (): JSX.Element => {
       const response = await userAPI.signIn(formData.email, formData.password);
 
       if (response.user != null) {
+        AlarmManager.getInstance().fetchAllAlarms();
         navigation.dispatch(StackActions.replace('MainMenu'));
       } else {
         openLoginErrorPopUp();

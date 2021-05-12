@@ -81,3 +81,18 @@ export function sortSchedules(
 
   return schedule1.time.minute - schedule2.time.minute;
 }
+
+export function medicationAlarmDates(alarm: Schedule): Date[] {
+  const dates: Date[] = [];
+
+  const days = Array.from(new Set(alarm.days));
+  const now = new Date();
+  const weekday = now.getDay();
+  days.forEach((day) => {
+    const diff = (day as number) - weekday;
+    const date = now.getDate() + (diff < 0 ? diff + 7 : diff);
+    dates.push(new Date(now.getFullYear(), now.getMonth(), date, alarm.time.hour, alarm.time.minute));
+  });
+
+  return dates;
+}
