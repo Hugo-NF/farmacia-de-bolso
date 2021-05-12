@@ -6,6 +6,6 @@ export const styledComponents = {
   LayoutContainer: styled.View<ViewProps>`
     flex: 1;
     flex-direction: column;
-    margin-top: ${Constants.statusBarHeight}px;
+    /*padding-top: ${Constants.statusBarHeight}px;*/
   `,
 };

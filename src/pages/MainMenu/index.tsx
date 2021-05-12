@@ -76,7 +76,7 @@ const MainMenu = (): JSX.Element => {
 
   // JSX returned.
   return (
-    <MainLayout disableScrollView>
+    <MainLayout>
       <MainContainer>
         <FlatList
           data={menuItems}
