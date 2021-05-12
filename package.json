@@ -27,6 +27,7 @@
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
     "react-native-gesture-handler": "~1.8.0",
+    "react-native-get-random-values": "^1.7.0",
     "react-native-paper": "^4.7.2",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area": "^0.5.1",
@@ -37,6 +38,7 @@
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "styled-components": "^5.2.3",
+    "uuid": "^8.3.2",
     "yup": "^0.32.9"
   },
   "devDependencies": {
@@ -46,6 +48,7 @@
     "@types/react-native": "^0.64.2",
     "@types/react-native-vector-icons": "^6.4.6",
     "@types/styled-components-react-native": "^5.1.1",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
     "babel-eslint": "^10.1.0",

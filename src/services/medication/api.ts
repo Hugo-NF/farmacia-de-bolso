@@ -1,5 +1,6 @@
 // Package imports.
 import firestore from '@react-native-firebase/firestore';
+import { v4 as uuid } from 'uuid';
 
 // Service imports.
 import userAPI from '../user/api';
@@ -98,9 +99,9 @@ const api = {
           userMedications.forEach((userMedication) => {
             userMedication.alarms
               .sort(sortSchedules)
-              .forEach((medicationAlarm, alarmIndex) => {
+              .forEach((medicationAlarm) => {
                 userAlarms.push({
-                  id: `${userMedication.id}_${alarmIndex}`,
+                  id: uuid(),
                   medicationData: userMedication.data,
                   schedule: medicationAlarm,
                 });

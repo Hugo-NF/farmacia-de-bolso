@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
@@ -7,25 +7,25 @@ import TextInputMask from 'react-native-text-input-mask';
 
 import { RouteProp, useRoute } from '@react-navigation/native';
 
+import { v4 as uuid } from 'uuid';
+
+import CustomTextInput from 'components/CustomTextInput';
+import MedicationSection from 'components/MedicationSection';
+import { ContentCard } from 'components/ContentCard';
+import { HeaderMode } from 'components/Header';
+
+import MainLayout from 'layouts/MainLayout';
+
 import { RoutesParams } from 'typings/routes';
+import {
+  Medication, MedicationHistory, MedicationSchedule, Schedule,
+} from 'typings/medication';
 
-import MainLayout from '../../layouts/MainLayout';
-
-import CustomTextInput from '../../components/CustomTextInput';
-import MedicationSection from '../../components/MedicationSection';
-import { ContentCard } from '../../components/ContentCard';
-import { HeaderMode } from '../../components/Header';
+import { medicationScheduleTime, medicationScheduleDaysToText, medicationScheduleDosage } from 'utils/medicationSchedule';
 
 import { styledComponents, styles } from './styles';
 
-interface ICardData {
-  id: number,
-  days: string,
-  time: string,
-  quantity: number,
-}
-
-const Medication = (): JSX.Element => {
+const MedicationPage = (): JSX.Element => {
   // Styles desestructuring
   const {
     MainContainer,
@@ -47,72 +47,88 @@ const Medication = (): JSX.Element => {
   // Page params
   const medicationId = useRoute<RouteProp<RoutesParams, 'Medication'>>().params?.medicationId;
 
+  const [medication, setMedication] = useState<Medication>();
+
   const submitCallback = (formData: FormikValues): void => {
-    console.log(formData);
+    const medicationData = {
+      quantity: parseInt(formData.quantity, 10),
+      ...formData,
+    };
+    console.log(medicationData);
+    console.log(uuid());
   };
 
-  // const renderCard = (d : ICardData) : JSX.Element => (
-  //   <ContentCard key={d.id} cardStyles={styles.ContentCard}>
-  //     <CardRow>
-  //       <CardHour>{d.time}</CardHour>
-  //       <CardQuantity>{d.quantity} {mocked.medicationData.unit}</CardQuantity>
-  //     </CardRow>
-  //     <CardRow>
-  //       <CardDay>{d.days}</CardDay>
-  //     </CardRow>
-  //     <CardRow>
-  //       <RedButton>
-  //         <ButtonTextWhite>Excluir</ButtonTextWhite>
-  //       </RedButton>
-  //       <OrangeButton>
-  //         <ButtonTextWhite>Editar</ButtonTextWhite>
-  //       </OrangeButton>
-  //     </CardRow>
-  //   </ContentCard>
-  // );
+  const renderCard = (item: MedicationSchedule) : JSX.Element => (
+    <ContentCard key={item.id} cardStyles={styles.ContentCard}>
+      <CardRow>
+        <CardHour>{medicationScheduleTime(item)}</CardHour>
+        <CardQuantity>{medicationScheduleDosage(item)}</CardQuantity>
+      </CardRow>
+      <CardRow>
+        <CardDay>{medicationScheduleDaysToText(item)}</CardDay>
+      </CardRow>
+      <CardRow>
+        <RedButton>
+          <ButtonTextWhite>Excluir</ButtonTextWhite>
+        </RedButton>
+        <OrangeButton>
+          <ButtonTextWhite>Editar</ButtonTextWhite>
+        </OrangeButton>
+      </CardRow>
+    </ContentCard>
+  );
 
-  // const renderSchedulers = () : Array<JSX.Element> | JSX.Element => {
-  //   if (mocked.schedules.length === 0) {
-  //     return (
-  //       <DescText>
-  //         Você ainda não adicionou nenhum horário para este medicamento.
-  //       </DescText>
-  //     );
-  //   }
+  const renderSchedule = (schedules: Array<Schedule>) : Array<JSX.Element> | JSX.Element => {
+    if (schedules.length === 0 || medication === undefined) {
+      return (
+        <DescText>
+          Você ainda não adicionou nenhum horário para este medicamento.
+        </DescText>
+      );
+    }
 
-  //   return mocked.schedules.map(renderCard);
-  // };
+    return schedules.map((schedule, index) => renderCard({
+      id: uuid(),
+      schedule,
+      medicationData: medication.data,
+    }));
+  };
 
-  // const renderAlarms = () : Array<JSX.Element> | JSX.Element => {
-  //   if (mocked.alarms.length === 0) {
-  //     return (
-  //       <DescText>
-  //         Você ainda não adicionou nenhum alarme. Adicione para não esquecer de tomar seu remédio.
-  //       </DescText>
-  //     );
-  //   }
+  const renderAlarms = (alarms: Array<Schedule>) : Array<JSX.Element> | JSX.Element => {
+    if (alarms.length === 0 || medication === undefined) {
+      return (
+        <DescText>
+          Você ainda não adicionou nenhum alarme. Adicione para não esquecer de tomar seu remédio.
+        </DescText>
+      );
+    }
 
-  //   return mocked.alarms.map(renderCard);
-  // };
+    return alarms.map((alarm, index) => renderCard({
+      id: uuid(),
+      schedule: alarm,
+      medicationData: medication.data,
+    }));
+  };
 
-  // const renderHistoric = () : Array<JSX.Element> | JSX.Element => (
-  //   mocked.historic.map((h) => (
-  //     <HistRow key={h.id}>
-  //       <HistText style={{ textAlign: 'left' }}>
-  //         {h.datetime}
-  //       </HistText>
-  //       <HistText
-  //         numberOfLines={1}
-  //         style={{
-  //           textAlign: 'right',
-  //           color: h.medicated ? '#219653' : '#EB5757',
-  //         }}
-  //       >
-  //         {h.medicated ? `Medicado - ${h.quantity} ${mocked.medicationData.unit}` : 'Não medicado'}
-  //       </HistText>
-  //     </HistRow>
-  //   ))
-  // );
+  // Verificar com o André se existe algum "utils" pro histórico
+  const renderHistoric = (medicationHistory: MedicationHistory) : Array<JSX.Element> | JSX.Element => (
+    medicationHistory.history.map((entry) => (
+      <HistRow key={uuid()}>
+        <HistText style={{ textAlign: 'left' }}>
+          {entry.datetime}
+        </HistText>
+        <HistText
+          numberOfLines={1}
+          style={{
+            textAlign: 'right',
+            color: entry.medicated ? '#219653' : '#EB5757',
+          }}
+        >
+          {entry.medicated ? `Medicado - ${entry.quantity} ${medication?.data.unit}` : 'Não medicado'}
+        </HistText>
+      </HistRow>
+    ))
+  );
 
   return (
     <MainLayout
@@ -130,7 +146,7 @@ const Medication = (): JSX.Element => {
           validationSchema={Yup.object().shape({
             name: Yup.string().required('Nome é obrigatório'),
             unit: Yup.string().required('Unidade é obrigatória'),
-            quantity: Yup.number().min(0, 'Deve ser maior ou igual a 0'),
+            quantity: Yup.string().required(),
           })}
           onSubmit={submitCallback}
         >
@@ -207,4 +223,4 @@ const Medication = (): JSX.Element => {
   );
 };
 
-export default Medication;
+export default MedicationPage;
