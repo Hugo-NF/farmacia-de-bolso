@@ -51,7 +51,11 @@ const MedicationAlarms = (): JSX.Element => {
   // Functions.
   function renderMedicationAlarm(alarm : MedicationSchedule) : JSX.Element {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(
+          'Medication', { medicationId: alarm.medicationId },
+        )}
+      >
         <ContentCard cardStyles={styles.userAlarm}>
           <AlarmTitle>{alarm.medicationData.name}</AlarmTitle>
           <AlarmScheduleDays>

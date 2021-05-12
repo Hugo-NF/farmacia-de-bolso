@@ -100,7 +100,11 @@ const MedicationStock = (): JSX.Element => {
     }
 
     return (
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate(
+          'Medication', { medicationId: medication.id },
+        )}
+      >
         <ContentCard cardStyles={styles.stockItem}>
           <StockItemTitle>{medication.data.name}</StockItemTitle>
           {renderStockItemInformation()}
