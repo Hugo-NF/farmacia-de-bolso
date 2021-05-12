@@ -11,6 +11,7 @@ const theme = {
     accent: '#2F80ED',
     background: 'white',
     surface: 'white',
+    success: '#27AE60',
     error: '#EB5757',
     text: 'black',
     onSurface: '#000000',

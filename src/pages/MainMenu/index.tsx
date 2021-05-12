@@ -22,7 +22,7 @@ const MainMenu = (): JSX.Element => {
   const menuItems : Array<MenuItem> = [
     {
       name: 'Medicamentos',
-      destination: 'MainMenu',
+      destination: 'MedicationIndex',
       icon: 'pill',
       iconColor: styles.menuItemIconColors.pill,
     },

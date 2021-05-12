@@ -7,6 +7,8 @@ import {
 import * as Yup from 'yup';
 import { StackActions, useNavigation } from '@react-navigation/native';
 
+import { Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import MainLayout from '../../layouts/MainLayout';
 
 import CustomTextInput from '../../components/CustomTextInput';
@@ -32,7 +34,9 @@ const Login = (): JSX.Element => {
   const {
     MainContainer,
     Title,
+    SignInButton,
     SignUpButton,
+    SignUpText,
     ButtonText,
   } = styledComponents;
 
@@ -53,7 +57,9 @@ const Login = (): JSX.Element => {
       } else {
         openLoginErrorPopUp();
       }
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
       openLoginErrorPopUp();
     }
   };
@@ -110,11 +116,14 @@ const Login = (): JSX.Element => {
                 secureTextEntry
                 {...styles.textInput}
               />
-              <SignUpButton
+              <SignInButton
                 disabled={formikHelpers.isSubmitting}
                 onPress={() => formikHelpers.handleSubmit()}
               >
                 <ButtonText>Acessar</ButtonText>
+              </SignInButton>
+              <SignUpButton onPress={() => navigation.navigate('Register')}>
+                <SignUpText>Registrar</SignUpText>
               </SignUpButton>
             </>
           )}
