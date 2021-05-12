@@ -2,48 +2,54 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-// Package provided type imports.
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+// Type imports.
+import {
+  FirebaseCollection,
+  FirebaseDocumentData,
+  FirebaseDocumentRef,
+  FirebaseDocumentSnapshot,
+  FirebaseUser,
+  FirebaseUserCredential,
+} from '../../typings/firebase';
 
 // Service implementation.
 const api = {
 
   createAuth(
     email : string, password : string,
-  ) : Promise<FirebaseAuthTypes.UserCredential> {
+  ) : Promise<FirebaseUserCredential> {
     return auth().createUserWithEmailAndPassword(email, password);
   },
 
-  currentUser() : FirebaseAuthTypes.User | null {
+  currentUser() : FirebaseUser | null {
     return auth().currentUser;
   },
 
-  currentUserDocument() : FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData> {
+  currentUserDocument() : FirebaseDocumentRef {
     return this.userDocument(this.currentUser()?.uid);
   },
 
   getReference(
-    userRef : FirebaseFirestoreTypes.DocumentReference,
-  ) : Promise<FirebaseFirestoreTypes.DocumentSnapshot<FirebaseFirestoreTypes.DocumentData>> {
+    userRef : FirebaseDocumentRef,
+  ) : Promise<FirebaseDocumentSnapshot> {
     return userRef.get();
   },
 
   getUser(
     userUID : string | undefined,
-  ) : Promise<FirebaseFirestoreTypes.DocumentSnapshot<FirebaseFirestoreTypes.DocumentData>> {
+  ) : Promise<FirebaseDocumentSnapshot> {
     return this.userDocument(userUID).get();
   },
 
   setDocumentData(
-    userUID : string, documentData : FirebaseFirestoreTypes.DocumentData,
+    userUID : string, documentData : FirebaseDocumentData,
   ) : Promise<void> {
     return this.userDocument(userUID).set(documentData);
   },
 
   signIn(
     email : string, password : string,
-  ) : Promise<FirebaseAuthTypes.UserCredential> {
+  ) : Promise<FirebaseUserCredential> {
     return auth().signInWithEmailAndPassword(email, password);
   },
 
@@ -51,13 +57,13 @@ const api = {
     return auth().signOut();
   },
 
-  userCollection() : FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData> {
+  userCollection() : FirebaseCollection {
     return firestore().collection('users');
   },
 
   userDocument(
     userUID : string | undefined,
-  ) : FirebaseFirestoreTypes.DocumentReference<FirebaseFirestoreTypes.DocumentData> {
+  ) : FirebaseDocumentRef {
     return this.userCollection().doc(userUID);
   },
 
