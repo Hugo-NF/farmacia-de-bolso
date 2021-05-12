@@ -42,9 +42,11 @@ export const styledComponents = {
   SignUpButton: styled.TouchableOpacity<TouchableOpacityProps>`
     justify-content: center;
     align-items: center;
-    padding: 8px 36px;
     border-radius: 5px;
+    margin-bottom: 30px;
+    padding: 8px 36px;
   `,
+
   SignUpText: styled.Text<TextProps>`
     color: ${Theme.colors.primary};
     font-size: 18px;
