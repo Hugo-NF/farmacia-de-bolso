@@ -29,12 +29,6 @@ export type Medication = {
   stock: number,
 };
 
-export type MedicationSchedule = {
-  id: string,
-  medicationData: MedicationData,
-  schedule: Schedule,
-};
-
 export type MedicationData = {
   name: string,
   unit: string,
@@ -49,6 +43,25 @@ export type MedicationHistoryEntry = {
   datetime: Date,
   medicated: boolean,
   quantity: number,
+};
+
+export type MedicationHistoryEntryUpdateParams = {
+  datetime?: Date,
+  medicated?: boolean,
+  quantity?: number,
+};
+
+export type MedicationSchedule = {
+  id: string,
+  medicationData: MedicationData,
+  schedule: Schedule,
+};
+
+export type MedicationUpdateParams = {
+  alarms?: Array<Schedule>,
+  data?: MedicationData,
+  schedule?: Array<Schedule>,
+  stock?: number,
 };
 
 export type Schedule = {

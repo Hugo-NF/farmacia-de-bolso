@@ -16,7 +16,10 @@ import {
   Medication,
   MedicationHistory,
   MedicationHistoryEntry,
+  MedicationHistoryEntryUpdateParams,
   MedicationSchedule,
+  MedicationUpdateParams,
+  Schedule,
 } from '../../typings/medication';
 
 // Service implementation.
@@ -31,6 +34,23 @@ const api = {
     });
   },
 
+  createMedicationAlarm(
+    medicationUID : string,
+    newAlarm : Schedule,
+  ) : Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.getMedication(medicationUID)
+        .then((medication) => {
+          resolve(
+            this.updateMedication(medicationUID, {
+              alarms: [...medication.alarms, newAlarm],
+            }),
+          );
+        })
+        .catch((err) => reject(err));
+    });
+  },
+
   createMedicationHistoryEntry(
     medicationUID : string,
     medicationHistoryEntry : MedicationHistoryEntry,
@@ -38,6 +58,23 @@ const api = {
     return this.medicationHistoryEntryFirebaseCollection().add({
       medication: this.medicationDocument(medicationUID),
       ...medicationHistoryEntry,
+    });
+  },
+
+  createMedicationSchedule(
+    medicationUID : string,
+    newSchedule : Schedule,
+  ) : Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.getMedication(medicationUID)
+        .then((medication) => {
+          resolve(
+            this.updateMedication(medicationUID, {
+              schedule: [...medication.schedule, newSchedule],
+            }),
+          );
+        })
+        .catch((err) => reject(err));
     });
   },
 
@@ -173,7 +210,7 @@ const api = {
 
   updateMedication(
     medicationUID : string,
-    medicationData : Medication,
+    medicationData : MedicationUpdateParams,
   ) : Promise<void> {
     return this.medicationDocument(medicationUID).set({
       ...medicationData,
@@ -182,7 +219,7 @@ const api = {
 
   updateMedicationHistoryEntry(
     medicationHistoryEntryUID : string,
-    medicationHistoryEntryData : MedicationHistoryEntry,
+    medicationHistoryEntryData : MedicationHistoryEntryUpdateParams,
   ) : Promise<void> {
     return this.medicationHistoryEntryDocument(medicationHistoryEntryUID).set({
       ...medicationHistoryEntryData,
