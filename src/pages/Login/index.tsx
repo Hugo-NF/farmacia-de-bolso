@@ -7,8 +7,6 @@ import {
 import * as Yup from 'yup';
 import { StackActions, useNavigation } from '@react-navigation/native';
 
-import { Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import MainLayout from '../../layouts/MainLayout';
 
 import CustomTextInput from '../../components/CustomTextInput';

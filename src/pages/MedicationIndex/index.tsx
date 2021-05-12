@@ -1,6 +1,6 @@
 // Package imports.
 import React, { useEffect, useState } from 'react';
-import { FlatList, Text, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 // Service imports.
