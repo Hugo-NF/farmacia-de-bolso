@@ -121,8 +121,8 @@ const CreateScheduleDialog = ({
                   days: Object.keys(selectedDays).map((x) => parseInt(x, 10) as WeekDays),
                   quantity: parseInt(quantity, 10),
                   time: {
-                    hour: time.getUTCHours() as HourOfDay,
-                    minute: time.getUTCMinutes() as MinuteOfHour,
+                    hour: time.getHours() as HourOfDay,
+                    minute: time.getMinutes() as MinuteOfHour,
                   },
                 };
                 onSave(newSchedule);

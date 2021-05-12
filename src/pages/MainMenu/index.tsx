@@ -38,12 +38,12 @@ const MainMenu = (): JSX.Element => {
       icon: 'package-variant-closed',
       iconColor: styles.menuItemIconColors.package,
     },
-    {
-      name: 'Histórico',
-      destination: 'MainMenu',
-      icon: 'history',
-      iconColor: styles.menuItemIconColors.history,
-    },
+    // {
+    //   name: 'Histórico',
+    //   destination: 'MainMenu',
+    //   icon: 'history',
+    //   iconColor: styles.menuItemIconColors.history,
+    // },
   ];
   const navigation = useNavigation();
 

@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { Alert } from 'react-native';
 
 import { Formik, FormikValues } from 'formik';
 import * as Yup from 'yup';
 
 import TextInputMask from 'react-native-text-input-mask';
+import { format } from 'date-fns';
 
-import { RouteProp, useRoute } from '@react-navigation/native';
+import {
+  RouteProp, useRoute, useFocusEffect, useNavigation,
+} from '@react-navigation/native';
 
 import { v4 as uuid } from 'uuid';
 
@@ -14,15 +18,23 @@ import CreateScheduleDialog from 'components/CreateScheduleDialog';
 import MedicationSection from 'components/MedicationSection';
 import { ContentCard } from 'components/ContentCard';
 import { HeaderMode } from 'components/Header';
+import LoadingIcon from 'components/LoadingIcon';
 
 import MainLayout from 'layouts/MainLayout';
 
 import { RoutesParams } from 'typings/routes';
+
+import medicationAPI from 'services/medication/api';
+
 import {
-  Medication, MedicationHistory, MedicationSchedule, Schedule,
+  Medication,
+  MedicationHistory,
+  MedicationSchedule,
+  Schedule,
 } from 'typings/medication';
 
 import { medicationScheduleTime, medicationScheduleDaysToText, medicationScheduleDosage } from 'utils/medicationSchedule';
+import { createErrorAlert } from '../../utils/errorPopups';
 
 import { styledComponents, styles } from './styles';
 
@@ -46,21 +58,71 @@ const MedicationPage = (): JSX.Element => {
   } = styledComponents;
 
   // Page params
-  const medicationId = useRoute<RouteProp<RoutesParams, 'Medication'>>().params?.medicationId;
+  const [medicationId, setMedicationId] = useState<string>(useRoute<RouteProp<RoutesParams, 'Medication'>>().params?.medicationId);
+  const [medication, setMedication] = useState<Medication>({
+    alarms: [],
+    schedule: [],
+    id: '',
+    data: {
+      name: '',
+      unit: '',
+    },
+    stock: 0,
+  });
+  const [medicationHistory, setMedicationHistory] = useState<MedicationHistory>();
 
-  const [medication, setMedication] = useState<Medication>();
   const [scheduleVisible, setScheduleVisible] = useState<boolean>(false);
   const [alarmVisible, setAlarmVisible] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const navigation = useNavigation();
+  const errorAlert = createErrorAlert(navigation);
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      if (medicationId !== undefined && medicationId !== null) {
+        medicationAPI.getMedication(medicationId)
+          .then((medicationResult) => {
+            setMedication(medicationResult);
+            return medicationAPI.getMedicationHistory(medicationResult.id);
+          })
+          .then((medicationHistoryResult) => setMedicationHistory(medicationHistoryResult))
+          .catch((error) => errorAlert())
+          .finally(() => setLoading(false));
+      } else {
+        setLoading(false);
+      }
+    }, []),
+  );
 
   const submitCallback = (formData: FormikValues): void => {
-    const medicationData = {
-      quantity: parseInt(formData.quantity, 10),
-      ...formData,
-    };
-    console.log(medicationData);
+    if (medicationId === undefined || medicationId === null) {
+      medicationAPI.createMedication({
+        alarms: medication.alarms,
+        schedule: medication.schedule,
+        data: {
+          name: formData.name,
+          unit: formData.unit,
+        },
+        stock: parseInt(formData.quantity, 10),
+      }).then((medicationUID) => {
+        setMedicationId(medicationUID);
+        Alert.alert('Concluído', `${formData.name} adicionado com sucesso`);
+      });
+    } else {
+      medicationAPI.updateMedication(medicationId, {
+        alarms: medication.alarms,
+        schedule: medication.schedule,
+        data: {
+          name: formData.name,
+          unit: formData.unit,
+        },
+        stock: parseInt(formData.quantity, 10),
+      }).then(() => Alert.alert('Concluído', `Dados do medicamento ${formData.name} atualizados`));
+    }
   };
 
-  const renderCard = (item: MedicationSchedule) : JSX.Element => (
+  const renderCard = (item: MedicationSchedule, isAlarm: boolean) : JSX.Element => (
     <ContentCard key={item.id} cardStyles={styles.ContentCard}>
       <CardRow>
         <CardHour>{medicationScheduleTime(item)}</CardHour>
@@ -70,17 +132,45 @@ const MedicationPage = (): JSX.Element => {
         <CardDay>{medicationScheduleDaysToText(item)}</CardDay>
       </CardRow>
       <CardRow>
-        <RedButton>
+        <RedButton
+          onPress={() => {
+            if (isAlarm) {
+              const removableIndex = medication.alarms.findIndex((alarm) => alarm === item.schedule);
+              if (removableIndex !== -1) {
+                medication.alarms.splice(removableIndex, 1);
+                const newMedication = {
+                  ...medication,
+                  alarms: [...medication.alarms],
+                };
+                setMedication(newMedication);
+                medicationAPI.updateMedication(medication.id, newMedication)
+                  .then(() => Alert.alert('Concluído', 'Alarme deletado com sucesso'));
+              }
+            } else {
+              const removableIndex = medication.schedule.findIndex((schedule) => schedule === item.schedule);
+              if (removableIndex !== -1) {
+                medication.schedule.splice(removableIndex, 1);
+                const newMedication = {
+                  ...medication,
+                  schedule: [...medication.schedule],
+                };
+                setMedication(newMedication);
+                medicationAPI.updateMedication(medication.id, newMedication)
+                  .then(() => Alert.alert('Concluído', 'Horário deletado com sucesso'));
+              }
+            }
+          }}
+        >
           <ButtonTextWhite>Excluir</ButtonTextWhite>
         </RedButton>
-        <OrangeButton>
+        {/* <OrangeButton>
           <ButtonTextWhite>Editar</ButtonTextWhite>
-        </OrangeButton>
+        </OrangeButton> */}
       </CardRow>
     </ContentCard>
   );
 
-  const renderSchedule = (schedules: Array<Schedule>) : Array<JSX.Element> | JSX.Element => {
+  const renderSchedule = (schedules: Array<Schedule>): Array<JSX.Element> | JSX.Element => {
     if (schedules.length === 0 || medication === undefined) {
       return (
         <DescText>
@@ -94,7 +184,7 @@ const MedicationPage = (): JSX.Element => {
       medicationId: medication.id,
       schedule,
       medicationData: medication.data,
-    }));
+    }, false));
   };
 
   const renderAlarms = (alarms: Array<Schedule>) : Array<JSX.Element> | JSX.Element => {
@@ -111,15 +201,15 @@ const MedicationPage = (): JSX.Element => {
       medicationId: medication.id,
       schedule: alarm,
       medicationData: medication.data,
-    }));
+    }, true));
   };
 
   // Verificar com o André se existe algum "utils" pro histórico
-  const renderHistory = (medicationHistory: MedicationHistory) : Array<JSX.Element> | JSX.Element => (
-    medicationHistory.history.map((entry) => (
+  const renderHistory = (medHistory: MedicationHistory) : Array<JSX.Element> | JSX.Element => (
+    medHistory.history.map((entry) => (
       <HistRow key={uuid()}>
         <HistText style={{ textAlign: 'left' }}>
-          {entry.datetime}
+          {format(entry.datetime, 'HH:mm - dd/MM/yyyy')}
         </HistText>
         <HistText
           numberOfLines={1}
@@ -134,6 +224,10 @@ const MedicationPage = (): JSX.Element => {
     ))
   );
 
+  if (loading) {
+    return <LoadingIcon />;
+  }
+
   return (
     <MainLayout
       headerConfig={{
@@ -144,23 +238,43 @@ const MedicationPage = (): JSX.Element => {
         <CreateScheduleDialog
           visible={scheduleVisible}
           setVisible={setScheduleVisible}
-          onSave={(schedule) => console.log('S', schedule)}
+          onSave={(schedule) => {
+            medicationAPI.createMedicationSchedule(medicationId, schedule)
+              .then(() => {
+                Alert.alert('Concluído', 'Horário criado com sucesso');
+                setMedication({
+                  ...medication,
+                  schedule: [...medication.schedule, schedule],
+                });
+              })
+              .catch(() => Alert.alert('Ooops', 'Não conseguimos criar um horário para o medicamento'));
+          }}
         />
         <CreateScheduleDialog
           visible={alarmVisible}
           setVisible={setAlarmVisible}
-          onSave={(alarm) => console.log('A', alarm)}
+          onSave={(alarm) => {
+            medicationAPI.createMedicationAlarm(medicationId, alarm)
+              .then(() => {
+                Alert.alert('Concluído', 'Alarme criado com sucesso');
+                setMedication({
+                  ...medication,
+                  alarms: [...medication.alarms, alarm],
+                });
+              })
+              .catch(() => Alert.alert('Ooops', 'Não conseguimos criar um alarme para o medicamento'));
+          }}
         />
         <Formik
           initialValues={{
-            name: '',
-            unit: '',
-            quantity: '',
+            name: medication?.data.name,
+            unit: medication?.data.unit,
+            quantity: medication?.stock.toString(),
           }}
           validationSchema={Yup.object().shape({
             name: Yup.string().required('Nome é obrigatório'),
             unit: Yup.string().required('Unidade é obrigatória'),
-            quantity: Yup.string().required(),
+            quantity: Yup.string().required('Informe uma quantidade'),
           })}
           onSubmit={submitCallback}
         >
@@ -187,20 +301,6 @@ const MedicationPage = (): JSX.Element => {
                 {...styles.textInput}
               />
 
-              <MedicationSection title="Horários">
-                <GreenButton onPress={() => setScheduleVisible(true)}>
-                  <ButtonTextWhite>Cadastrar novo horário</ButtonTextWhite>
-                </GreenButton>
-                {/* {renderSchedule()} */}
-              </MedicationSection>
-
-              <MedicationSection title="Alarmes">
-                <GreenButton onPress={() => setAlarmVisible(true)}>
-                  <ButtonTextWhite>Cadastrar novo alarme</ButtonTextWhite>
-                </GreenButton>
-                {/* {renderAlarms()} */}
-              </MedicationSection>
-
               <MedicationSection title="Estoque">
                 <CustomTextInput
                   fieldName="quantity"
@@ -208,6 +308,7 @@ const MedicationPage = (): JSX.Element => {
                   value={formikHelpers.values.quantity}
                   label="Quantidade"
                   mode="flat"
+                  keyboardType="phone-pad"
                   onBlur={() => formikHelpers.handleSubmit()}
                   render={(props: unknown) => (
                     <TextInputMask
@@ -222,6 +323,28 @@ const MedicationPage = (): JSX.Element => {
                 </DescText>
               </MedicationSection>
 
+              <MedicationSection title="Horários">
+                <>
+                  {medicationId !== undefined && medicationId !== null && (
+                    <GreenButton onPress={() => setScheduleVisible(true)}>
+                      <ButtonTextWhite>Cadastrar novo horário</ButtonTextWhite>
+                    </GreenButton>
+                  )}
+                </>
+                <>{renderSchedule(medication.schedule)}</>
+              </MedicationSection>
+
+              <MedicationSection title="Alarmes">
+                <>
+                  {medicationId !== undefined && medicationId !== null && (
+                  <GreenButton onPress={() => setAlarmVisible(true)}>
+                    <ButtonTextWhite>Cadastrar novo alarme</ButtonTextWhite>
+                  </GreenButton>
+                  )}
+                </>
+                <>{renderAlarms(medication.alarms)}</>
+              </MedicationSection>
+
               <MedicationSection title="Histórico - Resumo">
                 <DescText>
                   Aqui é um breve resumo, onde você poderá ver seu histórico parcial (última semana).
@@ -230,7 +353,7 @@ const MedicationPage = (): JSX.Element => {
                 <GrayButton>
                   <ButtonTextBlack>Ver todo o histórico</ButtonTextBlack>
                 </GrayButton>
-                {/* {renderHistory()} */}
+                <>{medicationHistory !== undefined && (renderHistory(medicationHistory))}</>
               </MedicationSection>
             </>
           )}
