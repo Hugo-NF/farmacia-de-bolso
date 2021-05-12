@@ -44,12 +44,6 @@ const MainMenu = (): JSX.Element => {
       icon: 'history',
       iconColor: styles.menuItemIconColors.history,
     },
-    {
-      name: 'Relatório',
-      destination: 'MainMenu',
-      icon: 'file-document-outline',
-      iconColor: styles.menuItemIconColors.file,
-    },
   ];
   const navigation = useNavigation();
 
@@ -76,7 +70,7 @@ const MainMenu = (): JSX.Element => {
 
   // JSX returned.
   return (
-    <MainLayout>
+    <MainLayout disableScrollView>
       <MainContainer>
         <FlatList
           data={menuItems}
