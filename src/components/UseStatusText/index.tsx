@@ -33,8 +33,4 @@ const UseStatusText = ({ schedules }: IUseStatusTextProps): JSX.Element => {
   );
 };
 
-UseStatusText.defaultProps = {
-  inUse: false,
-};
-
 export default UseStatusText;
