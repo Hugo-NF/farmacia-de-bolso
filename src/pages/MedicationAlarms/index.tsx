@@ -1,6 +1,6 @@
 // Package imports.
 import React, { useCallback, useState } from 'react';
-import { Alert, FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 // Component imports.
@@ -10,7 +10,8 @@ import LoadingIcon from '../../components/LoadingIcon';
 // Service imports.
 import medicationAPI from '../../services/medication/api';
 
-// Utils imports.
+// Utility imports.
+import { createErrorAlert } from '../../utils/errorPopups';
 import {
   medicationScheduleDaysToText,
   medicationScheduleDosage,
@@ -45,20 +46,7 @@ const MedicationAlarms = (): JSX.Element => {
   } = styledComponents;
 
   // Callbacks.
-  const errorAlert = useCallback(() : void => Alert.alert(
-    'Erro!',
-    'Ocorreu um erro no carregamento das informações.\n'
-    + 'Retornando para a página anterior.',
-    [
-      {
-        text: 'Ok',
-        onPress: () => navigation.goBack(),
-      },
-    ],
-    {
-      cancelable: false,
-    },
-  ), [navigation]);
+  const errorAlert = createErrorAlert(navigation);
 
   // Functions.
   function renderMedicationAlarm(alarm : MedicationSchedule) : JSX.Element {
