@@ -231,7 +231,8 @@ const MedicationPage = (): JSX.Element => {
   return (
     <MainLayout
       headerConfig={{
-        mode: HeaderMode.Custom,
+        mode: HeaderMode.Title,
+        title: { small: medicationId === undefined ? 'Novo' : 'Editar', normal: 'Medicamento' },
       }}
     >
       <MainContainer>
