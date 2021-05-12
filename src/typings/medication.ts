@@ -31,6 +31,7 @@ export type Medication = {
 
 export type MedicationSchedule = {
   id: string,
+  medicationId: string,
   medicationData: MedicationData,
   schedule: Schedule,
 };
