@@ -32,7 +32,9 @@ const Login = (): JSX.Element => {
   const {
     MainContainer,
     Title,
+    SignInButton,
     SignUpButton,
+    SignUpText,
     ButtonText,
   } = styledComponents;
 
@@ -53,7 +55,9 @@ const Login = (): JSX.Element => {
       } else {
         openLoginErrorPopUp();
       }
-    } catch {
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
       openLoginErrorPopUp();
     }
   };
@@ -110,11 +114,14 @@ const Login = (): JSX.Element => {
                 secureTextEntry
                 {...styles.textInput}
               />
-              <SignUpButton
+              <SignInButton
                 disabled={formikHelpers.isSubmitting}
                 onPress={() => formikHelpers.handleSubmit()}
               >
                 <ButtonText>Acessar</ButtonText>
+              </SignInButton>
+              <SignUpButton onPress={() => navigation.navigate('Register')}>
+                <SignUpText>Registrar</SignUpText>
               </SignUpButton>
             </>
           )}

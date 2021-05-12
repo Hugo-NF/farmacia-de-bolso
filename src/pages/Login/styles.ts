@@ -26,7 +26,7 @@ export const styledComponents = {
     text-transform: uppercase;
   `,
 
-  SignUpButton: styled.TouchableOpacity<TouchableOpacityProps>`
+  SignInButton: styled.TouchableOpacity<TouchableOpacityProps>`
     flex: 1;
     justify-content: center;
     align-items: center;
@@ -36,7 +36,20 @@ export const styledComponents = {
     background-color: ${Theme.colors.primary};
     border-radius: 5px;
     margin-top: 32px;
-    margin-bottom: 24px;
+    margin-bottom: 0px;
+  `,
+
+  SignUpButton: styled.TouchableOpacity<TouchableOpacityProps>`
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    padding: 8px 36px;
+  `,
+
+  SignUpText: styled.Text<TextProps>`
+    color: ${Theme.colors.primary};
+    font-size: 18px;
   `,
 };
 
