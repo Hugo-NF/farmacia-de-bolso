@@ -55,7 +55,6 @@ const MedicationPage = (): JSX.Element => {
       ...formData,
     };
     console.log(medicationData);
-    console.log(uuid());
   };
 
   const renderCard = (item: MedicationSchedule) : JSX.Element => (
@@ -111,7 +110,7 @@ const MedicationPage = (): JSX.Element => {
   };
 
   // Verificar com o André se existe algum "utils" pro histórico
-  const renderHistoric = (medicationHistory: MedicationHistory) : Array<JSX.Element> | JSX.Element => (
+  const renderHistory = (medicationHistory: MedicationHistory) : Array<JSX.Element> | JSX.Element => (
     medicationHistory.history.map((entry) => (
       <HistRow key={uuid()}>
         <HistText style={{ textAlign: 'left' }}>
@@ -177,12 +176,14 @@ const MedicationPage = (): JSX.Element => {
                 <GreenButton>
                   <ButtonTextWhite>Cadastrar novo horário</ButtonTextWhite>
                 </GreenButton>
+                {/* {renderSchedule()} */}
               </MedicationSection>
 
               <MedicationSection title="Alarmes">
                 <GreenButton>
                   <ButtonTextWhite>Cadastrar novo alarme</ButtonTextWhite>
                 </GreenButton>
+                {/* {renderAlarms()} */}
               </MedicationSection>
 
               <MedicationSection title="Estoque">
@@ -214,6 +215,7 @@ const MedicationPage = (): JSX.Element => {
                 <GrayButton>
                   <ButtonTextBlack>Ver todo o histórico</ButtonTextBlack>
                 </GrayButton>
+                {/* {renderHistory()} */}
               </MedicationSection>
             </>
           )}
