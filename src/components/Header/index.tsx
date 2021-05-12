@@ -31,7 +31,7 @@ const Header = ({
       <NavBar />
       {mode === HeaderMode.Title && title && (<HeaderTitle {...title} />)}
       {mode === HeaderMode.Image && imageSource && children}
-      {mode === HeaderMode.Custom && children && children}
+      {mode === HeaderMode.Custom && children}
       <HeaderHelpButton />
     </Container>
   );
