@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 // Component imports.
+import { HeaderMode } from 'components/Header';
 import { ContentCard } from '../../components/ContentCard';
 import LoadingIcon from '../../components/LoadingIcon';
 
@@ -130,7 +131,13 @@ const MedicationStock = (): JSX.Element => {
   if (loading === true) return (<LoadingIcon />);
 
   return (
-    <MainLayout disableScrollView>
+    <MainLayout
+      disableScrollView
+      headerConfig={{
+        mode: HeaderMode.Title,
+        title: { small: 'Meu', normal: 'Estoque' },
+      }}
+    >
       <MainContainer>
         {userMedications.length === 0
           ? (<LargeText>Nenhum medicamento cadastrado!</LargeText>)

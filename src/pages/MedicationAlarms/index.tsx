@@ -4,6 +4,7 @@ import { FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 // Component imports.
+import { HeaderMode } from 'components/Header';
 import { ContentCard } from '../../components/ContentCard';
 import LoadingIcon from '../../components/LoadingIcon';
 
@@ -91,7 +92,13 @@ const MedicationAlarms = (): JSX.Element => {
   if (loading === true) return (<LoadingIcon />);
 
   return (
-    <MainLayout disableScrollView>
+    <MainLayout
+      disableScrollView
+      headerConfig={{
+        mode: HeaderMode.Title,
+        title: { small: 'Meus', normal: 'Alarmes' },
+      }}
+    >
       <MainContainer>
         {userAlarms.length === 0
           ? (<LargeText>Nenhum alarme cadastrado!</LargeText>)
