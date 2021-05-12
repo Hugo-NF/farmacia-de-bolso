@@ -9,6 +9,17 @@ export enum WeekDays {
   Saturday,
 }
 
+// Companion objects for enums.
+export const WeekDaysAbbreviations = {
+  [WeekDays.Sunday]: 'Dom',
+  [WeekDays.Monday]: 'Seg',
+  [WeekDays.Tuesday]: 'Ter',
+  [WeekDays.Wednesday]: 'Qua',
+  [WeekDays.Thursday]: 'Qui',
+  [WeekDays.Friday]: 'Sex',
+  [WeekDays.Saturday]: 'Sáb',
+};
+
 // Exported types.
 export type Medication = {
   id: string,
@@ -18,9 +29,9 @@ export type Medication = {
   stock: number,
 };
 
-export type MedicationAlarm = {
+export type MedicationSchedule = {
   id: string,
-  medicationName: string,
+  medicationData: MedicationData,
   schedule: Schedule,
 };
 
