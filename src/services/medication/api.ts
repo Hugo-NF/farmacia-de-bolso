@@ -29,10 +29,14 @@ const api = {
 
   createMedication(
     newMedication : NewMedication,
-  ) : Promise<FirebaseDocumentRef> {
-    return this.medicationFirebaseCollection().add({
-      user: userAPI.currentUserDocument(),
-      ...newMedication,
+  ) : Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.medicationFirebaseCollection().add({
+        user: userAPI.currentUserDocument(),
+        ...newMedication,
+      })
+        .then((medicationDoc) => resolve(medicationDoc.id))
+        .catch((err) => reject(err));
     });
   },
 
