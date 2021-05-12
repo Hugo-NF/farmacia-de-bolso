@@ -12,9 +12,6 @@ import {
   FirebaseUserCredential,
 } from '../../typings/firebase';
 
-// Context imports.
-import { useAuthContext } from '../../contexts/auth';
-
 // Service implementation.
 const api = {
 
