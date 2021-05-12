@@ -1,5 +1,6 @@
 // Package imports.
 import firestore from '@react-native-firebase/firestore';
+import { v4 as uuid } from 'uuid';
 
 // Service imports.
 import userAPI from '../user/api';
@@ -16,18 +17,43 @@ import {
   Medication,
   MedicationHistory,
   MedicationHistoryEntry,
+  MedicationHistoryEntryUpdateParams,
   MedicationSchedule,
+  MedicationUpdateParams,
+  NewMedication,
+  Schedule,
 } from '../../typings/medication';
 
 // Service implementation.
 const api = {
 
   createMedication(
-    medication : Medication,
-  ) : Promise<FirebaseDocumentRef> {
-    return this.medicationFirebaseCollection().add({
-      user: userAPI.currentUserDocument(),
-      ...medication,
+    newMedication : NewMedication,
+  ) : Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.medicationFirebaseCollection().add({
+        user: userAPI.currentUserDocument(),
+        ...newMedication,
+      })
+        .then((medicationDoc) => resolve(medicationDoc.id))
+        .catch((err) => reject(err));
+    });
+  },
+
+  createMedicationAlarm(
+    medicationUID : string,
+    newAlarm : Schedule,
+  ) : Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.getMedication(medicationUID)
+        .then((medication) => {
+          resolve(
+            this.updateMedication(medicationUID, {
+              alarms: [...medication.alarms, newAlarm],
+            }),
+          );
+        })
+        .catch((err) => reject(err));
     });
   },
 
@@ -38,6 +64,23 @@ const api = {
     return this.medicationHistoryEntryFirebaseCollection().add({
       medication: this.medicationDocument(medicationUID),
       ...medicationHistoryEntry,
+    });
+  },
+
+  createMedicationSchedule(
+    medicationUID : string,
+    newSchedule : Schedule,
+  ) : Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.getMedication(medicationUID)
+        .then((medication) => {
+          resolve(
+            this.updateMedication(medicationUID, {
+              schedule: [...medication.schedule, newSchedule],
+            }),
+          );
+        })
+        .catch((err) => reject(err));
     });
   },
 
@@ -61,9 +104,9 @@ const api = {
           userMedications.forEach((userMedication) => {
             userMedication.alarms
               .sort(sortSchedules)
-              .forEach((medicationAlarm, alarmIndex) => {
+              .forEach((medicationAlarm) => {
                 userAlarms.push({
-                  id: `${userMedication.id}_${alarmIndex}`,
+                  id: uuid(),
                   medicationId: userMedication.id,
                   medicationData: userMedication.data,
                   schedule: medicationAlarm,
@@ -174,7 +217,7 @@ const api = {
 
   updateMedication(
     medicationUID : string,
-    medicationData : Medication,
+    medicationData : MedicationUpdateParams,
   ) : Promise<void> {
     return this.medicationDocument(medicationUID).set({
       ...medicationData,
@@ -183,7 +226,7 @@ const api = {
 
   updateMedicationHistoryEntry(
     medicationHistoryEntryUID : string,
-    medicationHistoryEntryData : MedicationHistoryEntry,
+    medicationHistoryEntryData : MedicationHistoryEntryUpdateParams,
   ) : Promise<void> {
     return this.medicationHistoryEntryDocument(medicationHistoryEntryUID).set({
       ...medicationHistoryEntryData,
