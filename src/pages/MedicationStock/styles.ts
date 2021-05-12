@@ -8,6 +8,7 @@ import { Theme } from '../../constants';
 // Styled components.
 export const styledComponents = {
   LargeText: styled.Text<TextProps>`
+    color: ${Theme.colors.text};
     font-size: 32px;
     text-align: center;
   `,
