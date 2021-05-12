@@ -1,3 +1,4 @@
+// Exported types.
 export type MenuItem = {
   name: string,
   destination: string,
