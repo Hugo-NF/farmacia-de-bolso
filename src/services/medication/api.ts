@@ -20,6 +20,7 @@ import {
   MedicationHistoryEntryUpdateParams,
   MedicationSchedule,
   MedicationUpdateParams,
+  NewMedication,
   Schedule,
 } from '../../typings/medication';
 
@@ -27,11 +28,11 @@ import {
 const api = {
 
   createMedication(
-    medication : Medication,
+    newMedication : NewMedication,
   ) : Promise<FirebaseDocumentRef> {
     return this.medicationFirebaseCollection().add({
       user: userAPI.currentUserDocument(),
-      ...medication,
+      ...newMedication,
     });
   },
 

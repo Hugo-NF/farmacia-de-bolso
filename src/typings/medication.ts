@@ -65,6 +65,13 @@ export type MedicationUpdateParams = {
   stock?: number,
 };
 
+export type NewMedication = {
+  alarms: Array<Schedule>,
+  data: MedicationData,
+  schedule: Array<Schedule>,
+  stock: number,
+};
+
 export type Schedule = {
   days: Array<WeekDays>,
   quantity: number,
