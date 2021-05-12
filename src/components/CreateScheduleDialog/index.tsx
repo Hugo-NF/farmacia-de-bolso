@@ -2,25 +2,44 @@ import React, { useState } from 'react';
 import theme from 'constants/theme';
 
 import {
-  Button, Checkbox, Dialog, List, Portal,
+  Button, Checkbox, Dialog, List, Menu, Portal, TextInput,
 } from 'react-native-paper';
 
-import { range } from 'lodash';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-import { Schedule, WeekDays, WeekDaysAbbreviations } from 'typings/medication';
-import { DayOption } from './styles';
+import { pickBy, range } from 'lodash';
+
+import TextInputMask from 'react-native-text-input-mask';
+
+import {
+  HourOfDay, MinuteOfHour, Schedule, WeekDays, WeekDaysAbbreviations,
+} from 'typings/medication';
+import { DayOption, styles } from './styles';
 
 interface ICreateScheduleDialog {
   visible: boolean,
   setVisible: React.Dispatch<React.SetStateAction<boolean>>,
+  onSave: (arg0: Schedule) => void
 }
 
 const CreateScheduleDialog = ({
   visible,
   setVisible,
+  onSave,
 }: ICreateScheduleDialog): JSX.Element => {
-  const [schedule, setSchedule] = useState<Schedule>();
-  const [checked, setChecked] = useState<Array<boolean>>([]);
+  const [checked, setChecked] = useState<Record<number, boolean>>({
+    0: false,
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+    5: false,
+    6: false,
+  });
+  const [showTimePicker, setShowTimePicker] = useState<boolean>(false);
+  const [time, setTime] = useState<Date>();
+  const [quantity, setQuantity] = useState<string>('');
+
   return (
     <Portal>
       <Dialog visible={visible} onDismiss={() => setVisible(false)}>
@@ -35,20 +54,67 @@ const CreateScheduleDialog = ({
                 <Checkbox
                   status={checked[day] ? 'checked' : 'unchecked'}
                   onPress={() => {
-                    setChecked((prev) => {
-                      prev[day] = !prev[day];
-                      return prev;
-                    });
+                    setChecked({ ...checked, [day]: !checked[day] });
                   }}
                 />
                 <List.Item title={WeekDaysAbbreviations[day]} />
               </DayOption>
             ))}
           </List.Accordion>
+          <Menu.Item
+            onPress={() => setShowTimePicker(true)}
+            icon="clock"
+            title="Horário"
+            style={styles.menuItem}
+            titleStyle={styles.menuItemTitle}
+          />
+          {showTimePicker && (
+          <DateTimePicker
+            onChange={(_: unknown, selectedDate: Date | undefined) => {
+              setShowTimePicker(false);
+              setTime(selectedDate || time);
+            }}
+            value={time || new Date()}
+            display="clock"
+            mode="time"
+          />
+          )}
+          <TextInput
+            label="Quantidade"
+            value={quantity}
+            mode="flat"
+            onChangeText={(text: string) => setQuantity(text)}
+            render={(props: unknown) => (
+              <TextInputMask
+                {...props}
+                mask="[000000000000]"
+              />
+            )}
+            {...styles.textInput}
+          />
         </Dialog.Content>
         <Dialog.Actions>
           <Button onPress={() => setVisible(false)} color={theme.colors.error}>Cancelar</Button>
-          <Button onPress={() => setVisible(false)} color={theme.colors.success}>Salvar</Button>
+          <Button
+            onPress={() => {
+              if (time !== undefined) {
+                const selectedDays = pickBy(checked, (x) => x === true);
+                const newSchedule: Schedule = {
+                  days: Object.keys(selectedDays).map((x) => parseInt(x, 10) as WeekDays),
+                  quantity: parseInt(quantity, 10),
+                  time: {
+                    hour: time.getUTCHours() as HourOfDay,
+                    minute: time.getUTCMinutes() as MinuteOfHour,
+                  },
+                };
+                onSave(newSchedule);
+                setVisible(false);
+              }
+            }}
+            color={theme.colors.success}
+          >
+            Salvar
+          </Button>
         </Dialog.Actions>
       </Dialog>
     </Portal>

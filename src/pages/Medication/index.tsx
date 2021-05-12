@@ -88,8 +88,9 @@ const MedicationPage = (): JSX.Element => {
       );
     }
 
-    return schedules.map((schedule, index) => renderCard({
+    return schedules.map((schedule) => renderCard({
       id: uuid(),
+      medicationId: medication.id,
       schedule,
       medicationData: medication.data,
     }));
@@ -104,8 +105,9 @@ const MedicationPage = (): JSX.Element => {
       );
     }
 
-    return alarms.map((alarm, index) => renderCard({
+    return alarms.map((alarm) => renderCard({
       id: uuid(),
+      medicationId: medication.id,
       schedule: alarm,
       medicationData: medication.data,
     }));
@@ -141,6 +143,7 @@ const MedicationPage = (): JSX.Element => {
         <CreateScheduleDialog
           visible={visible}
           setVisible={setVisible}
+          onSave={(schedule) => console.log(schedule)}
         />
         <Formik
           initialValues={{
